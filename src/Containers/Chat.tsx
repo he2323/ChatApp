@@ -24,6 +24,7 @@ const Message = styled.div`
   width: 75%;
   max-width: 75%;
   height: auto;
+  text-align: ${(props: any) => (props.loggedUser ? "right" : "left")};
   background-color: ${(props: any) =>
     props.loggedUser ? "lightblue" : "lightgrey"};
   margin-${(props: any) => (props.loggedUser ? "left" : "right")}: 25%;
@@ -34,21 +35,21 @@ const MsgHandle = styled.div`
   background-color: black;
 `;
 const Chat = () => {
-    return (
-        <ChatMain>
-          <ChoosenPerson></ChoosenPerson>
-          <ActualChat>
-            <Message loggedUser={0}>somerandom text shit</Message>
-            <Message loggedUser={1}>somerandom text shit</Message>
-            <Message loggedUser={0}>somerandom text shit</Message>
-            <Message loggedUser={1}>somerandom text shit</Message>
-            <Message loggedUser={1}>somerandom text shit</Message>
-            <Message loggedUser={0}>somerandom text shit</Message>
-            <Message loggedUser={1}>somerandom text shit</Message>
-          </ActualChat>
-          <MsgHandle></MsgHandle>
-        </ChatMain>
-    )
-}
+  return (
+    <ChatMain>
+      <ChoosenPerson></ChoosenPerson>
+      <ActualChat>
+        <Message loggedUser={0}>somerandom text shit</Message>
+        <Message loggedUser={1}>somerandom text shit</Message>
+        <Message loggedUser={0}>somerandom text shit</Message>
+        <Message loggedUser={1}>somerandom text shit</Message>
+        <Message loggedUser={1}>somerandom text shit</Message>
+        <Message loggedUser={0}>somerandom text shit</Message>
+        <Message loggedUser={1}>somerandom text shit</Message>
+      </ActualChat>
+      <MsgHandle></MsgHandle>
+    </ChatMain>
+  );
+};
 
-export default Chat
+export default Chat;
