@@ -1,10 +1,10 @@
+const Login = (props: any): JSX.Element => {
+  return (
+    <div>
+      login
+      <button onClick={() => props.toRegister()}>toRegister</button>
+    </div>
+  );
+};
 
-const Login = (): JSX.Element => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
-
-export default Login
+export default Login;
