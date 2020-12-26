@@ -8,16 +8,19 @@ import Register from "./Containers/Register";
 import Friends from "./Containers/Friends";
 import { MainBody, MainApp } from "./Styles";
 
-const App = (): JSX.Element => {
-  const [userLogedIn, setUserLogedIn] = useState(false);
+const App = () => {
   return (
-    <Router>
-      <MainBody>
-        <Switch>
-          <Route path="/login"><Login></Login></Route>
-        </Switch>
-      </MainBody>
-    </Router>
+    <div>
+      <Router>
+        <MainBody>
+          <Switch>
+            <Route path="/login">
+              <Login></Login>
+            </Route>
+          </Switch>
+        </MainBody>
+      </Router>
+    </div>
   );
 };
 
