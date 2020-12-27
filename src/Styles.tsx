@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import img from "./images/cosmic.jpg";
+import MainBackground from "./images/cosmic.jpg";
+import loginImg from "./images/loginImg.png";
 
 export const MainBody = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url(${img});
+  background-image: url(${MainBackground});
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -18,7 +19,7 @@ export const MainApp = styled.div`
 `;
 
 export const ChatMain = styled.div`
-  width: calc(80vw * 0.9);
+  width: calc(75vw * 0.9);
   height: 100%;
   background-color: brown;
 `;
@@ -41,6 +42,8 @@ export const Message = styled.div`
   width: 75%;
   max-width: 75%;
   height: auto;
+  margin-top: 2px;
+  margin-bottom: 2px;
   text-align: ${(props: any) => (props.loggedUser ? "right" : "left")};
   background-color: ${(props: any) =>
     props.loggedUser ? "lightblue" : "lightgrey"};
@@ -55,7 +58,7 @@ export const ContactsList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: calc(20vw * 0.9);
+  width: calc(25vw * 0.9);
   height: 100%;
   background-color: lime;
 `;
@@ -99,3 +102,47 @@ export const Constacts = styled.div`
   overflow-y: ${(props: any) => (props.big ? "scroll" : "hidden")};
   overflow-x: hidden;
 `;
+//Login
+export const MainLogin = styled.div`
+  display: flex;
+  flex-wrap: wrap
+  item-align: center;
+  width: 90%;
+  height: 90%;
+`;
+export const LoginImg = styled.div`
+  width: 50%;
+  heigth: 100%;
+  background-image: url(${loginImg});
+  background-repeat: no-repeat;
+`;
+export const LoginForm = styled.div`
+  width: 50%;
+  heigth: 100%;
+  display: flex;
+  flex-wrap: no-wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+export const LoginLabel = styled.label`
+font-size: 40px;
+font-weight: bolder;
+color: white;
+`;
+export const InputContainer = styled.div`
+background-color: lightgrey;
+border-radius: 70px;
+width: 100%;
+height: 3.5rem;
+display: flex;
+flex-wrap: wrap;
+flex-direction: row;
+align-items: space-between;
+margin-top: 25px;
+margin-bottom: 25px;
+
+`;
+export const InputIcon = styled.div``;
+export const InputAct = styled.div``;
+

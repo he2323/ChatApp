@@ -9,12 +9,16 @@ import { MainBody, MainApp } from "./Styles";
 const App = () => {
   const [userLogged, setUserLogged] = useState(true);
   const [userHaveAccount, setUserHaveAccount] = useState(true);
-  const toLogin = () => setUserHaveAccount(true);
-  const toRegister = () => setUserHaveAccount(false);
+  const [mail, setMail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const logOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const toLogin = (): void => setUserHaveAccount(true);
+  const toRegister = (): void => setUserHaveAccount(false);
+  const changeMail = (value: string): void => setMail(value);
+  const changePassword = (value: string): void => setPassword(value);
+
+  const logOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
     setUserLogged(false);
-  };
   return (
     <MainBody>
       {userLogged ? (
@@ -23,7 +27,13 @@ const App = () => {
           <Chat logOut={logOut}></Chat>
         </MainApp>
       ) : userHaveAccount ? (
-        <Login toRegister={toRegister}></Login>
+        <Login
+          changeLogin={(value: string) => changeMail(value)}
+          mail={mail}
+          changePassword={(value: string) => changePassword(value)}
+          password={password}
+          toRegister={toRegister}
+        ></Login>
       ) : (
         <Register toLogin={toLogin}></Register>
       )}
