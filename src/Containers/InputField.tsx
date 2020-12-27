@@ -1,4 +1,4 @@
-import { InputContainer } from "../Styles";
+import { InputContainer, InputIcon, InputAct } from "../Styles";
 
 interface InputI {
   icon: any;
@@ -16,8 +16,8 @@ const InputField = ({
 }: InputI) => {
   return (
     <InputContainer>
-      <div>{icon}</div>
-      <input
+      <InputIcon>{icon}</InputIcon>
+      <InputAct
         type={type}
         placeholder={placeholder}
         value={value}
@@ -25,7 +25,6 @@ const InputField = ({
           changeValue(e.target.value)
         }
       />
-      <button type="button" onClick={() => console.log(`${placeholder}: ${value}`)}>log</button>
     </InputContainer>
   );
 };

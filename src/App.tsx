@@ -7,7 +7,7 @@ import Friends from "./Containers/Friends";
 import { MainBody, MainApp } from "./Styles";
 
 const App = () => {
-  const [userLogged, setUserLogged] = useState(true);
+  const [userLogged, setUserLogged] = useState(false);
   const [userHaveAccount, setUserHaveAccount] = useState(true);
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +19,19 @@ const App = () => {
 
   const logOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
     setUserLogged(false);
+  const logIn = () => {
+    if (mail.length > 0 && password.length > 0) {
+      fetch(`/login/${mail}/${password}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.err === true) {
+            alert("bad pass or mail");
+          } else {
+            console.log(data);
+          }
+        });
+    } else alert("to short");
+  };
   return (
     <MainBody>
       {userLogged ? (
@@ -33,6 +46,7 @@ const App = () => {
           changePassword={(value: string) => changePassword(value)}
           password={password}
           toRegister={toRegister}
+          logIn={logIn}
         ></Login>
       ) : (
         <Register toLogin={toLogin}></Register>

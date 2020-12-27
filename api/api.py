@@ -1,25 +1,15 @@
-import time
-from flask import Flask
-import mysql.connector
+from flask import Flask, request
 
 app = Flask(__name__)
 
 
-def connection_test():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password=""
-    )
 
-
-@app.route('/dbTest')
-def dbTest():
-    myDb = connection_test()
-    mycursor = myDb.cursor()
-    mycursor.execute("CREATE DATABASE dbTestPython")
-    return 'OK'
-
+@app.route("/login/<string:mail>/<string:password>")
+def login(mail, password):
+    if len(mail) < 3 or len(password) < 8:
+        return {"err": True}
+    else:
+        return{"mail": mail, "pass": password, "err": False}
 
 
 app.run()

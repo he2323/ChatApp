@@ -106,7 +106,8 @@ export const Constacts = styled.div`
 export const MainLogin = styled.div`
   display: flex;
   flex-wrap: wrap
-  item-align: center;
+  align-items: center;
+  
   width: 90%;
   height: 90%;
 `;
@@ -116,8 +117,9 @@ export const LoginImg = styled.div`
   background-image: url(${loginImg});
   background-repeat: no-repeat;
 `;
-export const LoginForm = styled.div`
-  width: 50%;
+export const Forms = styled.form`
+  margin: 0 auto;
+  width: 30%;
   heigth: 100%;
   display: flex;
   flex-wrap: no-wrap;
@@ -126,23 +128,41 @@ export const LoginForm = styled.div`
   justify-content: center;
 `;
 export const LoginLabel = styled.label`
-font-size: 40px;
-font-weight: bolder;
-color: white;
+  font-size: 40px;
+  font-weight: bolder;
+  color: white;
 `;
 export const InputContainer = styled.div`
-background-color: lightgrey;
-border-radius: 70px;
-width: 100%;
-height: 3.5rem;
-display: flex;
-flex-wrap: wrap;
-flex-direction: row;
-align-items: space-between;
-margin-top: 25px;
-margin-bottom: 25px;
-
+  background-color: lightgrey;
+  border-radius: 70px;
+  width: 15rem;
+  height: 3.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
 `;
-export const InputIcon = styled.div``;
-export const InputAct = styled.div``;
-
+export const InputIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 100%;
+`;
+export const InputAct = styled.input`
+background-color: lightgrey;
+border: none;
+height: 3rem;
+&:focus{
+  outline: none;
+}
+`;
+export const LoginButton = styled.button`
+width: 100%;
+height: 3rem;
+border-radius: 70px;
+background-color: lime;
+border: none;
+`;

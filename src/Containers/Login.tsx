@@ -1,4 +1,4 @@
-import { MainLogin, LoginImg, LoginForm, LoginLabel } from "../Styles";
+import { MainLogin, LoginImg, Forms, LoginLabel, LoginButton } from "../Styles";
 import InputField from "./InputField";
 import { HiMail, HiLockClosed } from "react-icons/hi";
 interface LoginI {
@@ -7,26 +7,25 @@ interface LoginI {
   toRegister: () => void;
   changeLogin: (value: string) => void;
   changePassword: (value: string) => void;
-
-
+  logIn: () => void;
 }
 
 const Login = ({
   toRegister,
   changePassword,
-  mail,
   changeLogin,
+  logIn,
+  mail,
   password,
 }: LoginI): JSX.Element => {
   return (
     <MainLogin>
       <LoginImg></LoginImg>
-      <LoginForm>
-        <form action="/login" method="post">
+      <Forms>
           <LoginLabel>Member Login</LoginLabel>
           <InputField
             icon={<HiMail />}
-            type={"text"}
+            type={"email"}
             placeholder={"mail"}
             value={mail}
             changeValue={(value: string): void => changeLogin(value)}
@@ -38,9 +37,9 @@ const Login = ({
             value={password}
             changeValue={changePassword}
           />
-        </form>
+          <LoginButton type={"LoginButton"} onClick = {() => logIn()}>logIn</LoginButton>
         <div onClick = {()=>toRegister()}>Sign Up</div>
-      </LoginForm>
+      </Forms>
     </MainLogin>
   );
 };
