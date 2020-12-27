@@ -1,9 +1,17 @@
-import {ChatMain, ChoosenPerson, ActualChat, Message, MsgHandle} from "../Styles"
+import {
+  ChatMain,
+  ChoosenPerson,
+  ActualChat,
+  Message,
+  MsgHandle,
+} from "../Styles";
 
 const Chat = (props: any): JSX.Element => {
   return (
     <ChatMain>
-      <ChoosenPerson><button onClick = {props.logOut}>logOut</button></ChoosenPerson>
+      <ChoosenPerson>
+        <button onClick={props.logOut}>logOut</button>
+      </ChoosenPerson>
       <ActualChat>
         <Message loggedUser={0}>somerandom text shit</Message>
         <Message loggedUser={1}>somerandom text shit</Message>

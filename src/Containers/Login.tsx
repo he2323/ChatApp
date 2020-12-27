@@ -22,23 +22,25 @@ const Login = ({
     <MainLogin>
       <LoginImg></LoginImg>
       <Forms>
-          <LoginLabel>Member Login</LoginLabel>
-          <InputField
-            icon={<HiMail />}
-            type={"email"}
-            placeholder={"mail"}
-            value={mail}
-            changeValue={(value: string): void => changeLogin(value)}
-          />
-          <InputField
-            icon={<HiLockClosed />}
-            type={"password"}
-            placeholder={"password"}
-            value={password}
-            changeValue={changePassword}
-          />
-          <LoginButton type={"LoginButton"} onClick = {() => logIn()}>logIn</LoginButton>
-        <div onClick = {()=>toRegister()}>Sign Up</div>
+        <LoginLabel>Member Login</LoginLabel>
+        <InputField
+          icon={<HiMail />}
+          type={"email"}
+          placeholder={"mail"}
+          value={mail}
+          changeValue={(value: string): void => changeLogin(value)}
+        />
+        <InputField
+          icon={<HiLockClosed />}
+          type={"password"}
+          placeholder={"password"}
+          value={password}
+          changeValue={changePassword}
+        />
+        <LoginButton type={"LoginButton"} onClick={() => logIn()}>
+          logIn
+        </LoginButton>
+        <div onClick={() => toRegister()}>Sign Up</div>
       </Forms>
     </MainLogin>
   );

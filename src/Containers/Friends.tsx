@@ -1,9 +1,15 @@
 import { useState } from "react";
-import {ContactsList, GroupChoose, SearchBar, Constacts, Person} from "../Styles"
+import {
+  ContactsList,
+  GroupChoose,
+  SearchBar,
+  Constacts,
+  Person,
+} from "../Styles";
 
 const Friends = () => {
   // eslint-disable-next-line
-    const [friends, setFriends] = useState([1,3,2,42,234,1,123,123,456,54,2]);
+  const [friends, setFriends] = useState([]);
   return (
     <ContactsList>
       <GroupChoose></GroupChoose>

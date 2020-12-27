@@ -33,6 +33,7 @@ export const ChoosenPerson = styled.div`
 export const ActualChat = styled.div`
   width: 100%;
   min-height: 80%;
+  max-height: 80%;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -152,17 +153,17 @@ export const InputIcon = styled.div`
   height: 100%;
 `;
 export const InputAct = styled.input`
-background-color: lightgrey;
-border: none;
-height: 3rem;
-&:focus{
-  outline: none;
-}
+  background-color: lightgrey;
+  border: none;
+  height: 3rem;
+  &:focus {
+    outline: none;
+  }
 `;
 export const LoginButton = styled.button`
-width: 100%;
-height: 3rem;
-border-radius: 70px;
-background-color: lime;
-border: none;
+  width: 100%;
+  height: 3rem;
+  border-radius: 70px;
+  background-color: lime;
+  border: none;
 `;
