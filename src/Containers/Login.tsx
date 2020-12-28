@@ -38,7 +38,7 @@ const Login = ({
           changeValue={changePassword}
         />
         <LoginButton type={"LoginButton"} onClick={() => logIn()}>
-          logIn
+          Login
         </LoginButton>
         <div>
           No account?

@@ -108,20 +108,21 @@ export const MainLogin = styled.div`
   display: flex;
   flex-wrap: wrap
   align-items: center;
-  
+  justify-content: center;
   width: 90%;
   height: 90%;
 `;
 export const LoginImg = styled.div`
   width: 50%;
-  heigth: 100%;
+  height: 100%;
   background-image: url(${loginImg});
   background-repeat: no-repeat;
+  border-radius: 70px;
 `;
 export const Forms = styled.div`
   margin: 0 auto;
   width: 30%;
-  heigth: 100%;
+  height: 100%;
   display: flex;
   flex-wrap: no-wrap;
   flex-direction: column;

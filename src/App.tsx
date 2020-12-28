@@ -9,6 +9,7 @@ import { MainBody, MainApp } from "./Styles";
 const App = () => {
   //data to store
   const [userLogged, setUserLogged] = useState(false);
+  const [loggedUser, setLoggedUser] = useState({})
   const [userHaveAccount, setUserHaveAccount] = useState(true);
   const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,10 +50,12 @@ const App = () => {
       fetch(`/login/${mail}/${password}`)
         .then((response) => response.json())
         .then((data) => {
-          if (data.err === true) {
-            alert("bad pass or mail");
+          if (data.err === false) {
+            setLoggedUser(data)
+            setUserLogged(true);
           } else {
             console.log(data);
+            alert("bad pass or mail");
           }
         });
     } else alert("to short");
@@ -81,7 +84,7 @@ const App = () => {
           name={name}
           nickname={nickname}
           image_link={image_link}
-          register = {() => registerUser()}
+          register={() => registerUser()}
           toLogin={toLogin}
           changeMail={(value: string) => changeMail(value)}
           changePassword={(value: string) => changePassword(value)}

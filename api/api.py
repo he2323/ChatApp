@@ -1,10 +1,13 @@
 from flask import Flask
-import pymongo
+from pymongo import MongoClient
 import sys
+from bson import json_util
+import json
+
 
 app = Flask(__name__)
 
-DbClient = pymongo.MongoClient("mongodb://localhost:27017/")
+DbClient = MongoClient("mongodb://localhost:27017/")
 Database = DbClient["chatApp"]
 UsersCollection = Database["users"]
 GroupsCollection = Database["groups"]
@@ -21,12 +24,12 @@ def increaseCounter(counter_name):
     return new_counter_value
 
 
-@app.route("/register/<mail>/<password>/<name>/<nickname>/<image_link>/<user_privilege_level>")
+@app.route("/register/<string:mail>/<string:password>/<string:name>/<string:nickname>/<string:image_link>/<int:user_privilege_level>")
 def register(mail, password, name, nickname, image_link, user_privilege_level):
 
     if "@" in mail and len(mail) >= 5 and len(password) >= 8 and len(name) > 0 and int(user_privilege_level) > 0:
         new_user = {"_id": increaseCounter("users"), "user_email": mail, "user_password": password, "user_name": name, "user_nickname": nickname,
-                    "user_image_link": image_link, "user_friends_ids": [], "user_groups_ids": [], "user_privilege_level": user_privilege_level}
+                    "user_image_link": image_link, "user_friends_ids": [1, 5, 3, 2, 5, 1], "user_groups_ids": [1, 5, 3, 2, 5, 1], "user_privilege_level": user_privilege_level}
         UsersCollection.insert_one(new_user)
         return {"res": True}
     else:
@@ -35,10 +38,15 @@ def register(mail, password, name, nickname, image_link, user_privilege_level):
 
 @app.route("/login/<string:mail>/<string:password>")
 def login(mail, password):
-    if len(mail) < 3 or len(password) < 8:
-        return {"err": True}
+    query = {'user_email': mail, "user_password": password}
+    user = UsersCollection.find_one(query)
+    res = {'err': False}
+
+    if user:
+        res.update(user)
+        return res
     else:
-        return{"mail": mail, "pass": password, "err": False}
+        return {"err": True}
 
 
 app.run(debug=True)
