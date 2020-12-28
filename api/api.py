@@ -23,9 +23,10 @@ def increaseCounter(counter_name):
 
 @app.route("/register/<mail>/<password>/<name>/<nickname>/<image_link>/<user_privilege_level>")
 def register(mail, password, name, nickname, image_link, user_privilege_level):
-    new_user = {"_id": increaseCounter("users"), "user_email": mail, "user_password": password, "user_name": name, "user_nickname": nickname,
-                "user_image_link": image_link, "user_friends_ids": [], "user_groups_ids": [], "user_privilege_level": user_privilege_level}
-    if "@" in new_user["user_email"] and len(new_user["user_mail"]) >= 5 and len(new_user["user_password"]) >= 8 and len(new_user["user_name"]) > 0 and int(new_user["user_privilege_level"]) > 0:
+
+    if "@" in mail and len(mail) >= 5 and len(password) >= 8 and len(name) > 0 and int(user_privilege_level) > 0:
+        new_user = {"_id": increaseCounter("users"), "user_email": mail, "user_password": password, "user_name": name, "user_nickname": nickname,
+                    "user_image_link": image_link, "user_friends_ids": [], "user_groups_ids": [], "user_privilege_level": user_privilege_level}
         UsersCollection.insert_one(new_user)
         return {"res": True}
     else:

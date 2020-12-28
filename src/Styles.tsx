@@ -118,7 +118,7 @@ export const LoginImg = styled.div`
   background-image: url(${loginImg});
   background-repeat: no-repeat;
 `;
-export const Forms = styled.form`
+export const Forms = styled.div`
   margin: 0 auto;
   width: 30%;
   heigth: 100%;
@@ -161,7 +161,7 @@ export const InputAct = styled.input`
   }
 `;
 export const LoginButton = styled.button`
-  width: 100%;
+  width: 10rem;
   height: 3rem;
   border-radius: 70px;
   background-color: lime;

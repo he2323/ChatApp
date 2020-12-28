@@ -5,7 +5,7 @@ interface LoginI {
   mail: string;
   password: string;
   toRegister: () => void;
-  changeLogin: (value: string) => void;
+  changeMail: (value: string) => void;
   changePassword: (value: string) => void;
   logIn: () => void;
 }
@@ -13,7 +13,7 @@ interface LoginI {
 const Login = ({
   toRegister,
   changePassword,
-  changeLogin,
+  changeMail,
   logIn,
   mail,
   password,
@@ -28,7 +28,7 @@ const Login = ({
           type={"email"}
           placeholder={"mail"}
           value={mail}
-          changeValue={(value: string): void => changeLogin(value)}
+          changeValue={(value: string): void => changeMail(value)}
         />
         <InputField
           icon={<HiLockClosed />}
@@ -40,7 +40,10 @@ const Login = ({
         <LoginButton type={"LoginButton"} onClick={() => logIn()}>
           logIn
         </LoginButton>
-        <div onClick={() => toRegister()}>Sign Up</div>
+        <div>
+          No account?
+          <div onClick={() => toRegister()}>Sign Up</div>
+        </div>
       </Forms>
     </MainLogin>
   );
