@@ -53,6 +53,12 @@ def login(mail, password):
         return {"err": True}
 
 
+@app.route("/deleteUser/<int:user_id>")
+def delete_user(user_id):
+    UsersCollection.delete_one({"_id": user_id})
+    return {"status": "git"}
+
+
 app.run(debug=True)
 """
 users:

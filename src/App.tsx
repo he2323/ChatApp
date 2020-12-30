@@ -5,22 +5,10 @@ import Login from "./Containers/Login";
 import Register from "./Containers/Register";
 import Friends from "./Containers/Friends";
 import { MainBody, MainApp } from "./Styles";
-import { UserO } from "./Containers/Friends";
 const App = () => {
   //data to store
   const [userLogged, setUserLogged] = useState(false);
-  const [loggedUser, setLoggedUser] = useState({
-    _id: 0,
-    user_email: "",
-    user_password: "",
-    user_name: "",
-    user_nickname: "",
-    user_image_link: "",
-    user_friends_ids: [],
-    user_groups_ids: [],
-    user_privilege_level: 0,
-    err: false,
-  });
+  const [loggedUser, setLoggedUser] = useState({});
   const [userHaveAccount, setUserHaveAccount] = useState(true);
   const [mail, setMail] = useState("admin");
   const [password, setPassword] = useState("admin");
@@ -72,7 +60,7 @@ const App = () => {
         });
     } else alert("to short");
   };
-
+  const deleteUser = (id: number) => fetch(`/deleteUser/${id}`);
   return (
     <MainBody>
       {userLogged ? (
@@ -88,6 +76,7 @@ const App = () => {
             user_groups_ids={loggedUser.user_groups_ids}
             user_privilege_level={loggedUser.user_privilege_level}
             err={loggedUser.err}
+            delete_user = {deleteUser}
           ></Friends>
           <Chat logOut={logOut}></Chat>
         </MainApp>
