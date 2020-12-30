@@ -5,14 +5,25 @@ import Login from "./Containers/Login";
 import Register from "./Containers/Register";
 import Friends from "./Containers/Friends";
 import { MainBody, MainApp } from "./Styles";
-
+import { UserO } from "./Containers/Friends";
 const App = () => {
   //data to store
   const [userLogged, setUserLogged] = useState(false);
-  const [loggedUser, setLoggedUser] = useState({})
+  const [loggedUser, setLoggedUser] = useState({
+    _id: 0,
+    user_email: "",
+    user_password: "",
+    user_name: "",
+    user_nickname: "",
+    user_image_link: "",
+    user_friends_ids: [],
+    user_groups_ids: [],
+    user_privilege_level: 0,
+    err: false,
+  });
   const [userHaveAccount, setUserHaveAccount] = useState(true);
-  const [mail, setMail] = useState("");
-  const [password, setPassword] = useState("");
+  const [mail, setMail] = useState("admin");
+  const [password, setPassword] = useState("admin");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [image_link, setImage_link] = useState("");
@@ -32,7 +43,8 @@ const App = () => {
 
   const registerUser = () => {
     fetch(
-      `/register/${mail}/${password}/${name}/${nickname}/${image_link}>/${privilege_level}`
+      `/register/${mail}/${password}/${name}/${nickname}/${image_link}>/${privilege_level}`,
+      { method: "POST" }
     )
       .then((res) => res.json())
       .then((data) => {
@@ -47,11 +59,11 @@ const App = () => {
 
   const logIn = () => {
     if (mail.length > 0 && password.length > 0) {
-      fetch(`/login/${mail}/${password}`)
+      fetch(`/login/${mail}/${password}`, { method: "POST" })
         .then((response) => response.json())
         .then((data) => {
           if (data.err === false) {
-            setLoggedUser(data)
+            setLoggedUser(data);
             setUserLogged(true);
           } else {
             console.log(data);
@@ -65,7 +77,18 @@ const App = () => {
     <MainBody>
       {userLogged ? (
         <MainApp>
-          <Friends></Friends>
+          <Friends
+            _id={loggedUser._id}
+            user_email={loggedUser.user_email}
+            user_password={loggedUser.user_password}
+            user_name={loggedUser.user_name}
+            user_nickname={loggedUser.user_nickname}
+            user_image_link={loggedUser.user_image_link}
+            user_friends_ids={loggedUser.user_friends_ids}
+            user_groups_ids={loggedUser.user_groups_ids}
+            user_privilege_level={loggedUser.user_privilege_level}
+            err={loggedUser.err}
+          ></Friends>
           <Chat logOut={logOut}></Chat>
         </MainApp>
       ) : userHaveAccount ? (

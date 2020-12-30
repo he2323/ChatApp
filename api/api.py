@@ -24,19 +24,19 @@ def increaseCounter(counter_name):
     return new_counter_value
 
 
-@app.route("/register/<string:mail>/<string:password>/<string:name>/<string:nickname>/<string:image_link>/<int:user_privilege_level>")
+@app.route("/register/<string:mail>/<string:password>/<string:name>/<string:nickname>/<string:image_link>/<int:user_privilege_level>", methods=["POST"])
 def register(mail, password, name, nickname, image_link, user_privilege_level):
 
-    if "@" in mail and len(mail) >= 5 and len(password) >= 8 and len(name) > 0 and int(user_privilege_level) > 0:
+    if ("@" in mail or mail == "admin") and len(mail) >= 5 and (len(password) >= 8 or password == "admin") and len(name) > 0 and int(user_privilege_level) > 0:
         new_user = {"_id": increaseCounter("users"), "user_email": mail, "user_password": password, "user_name": name, "user_nickname": nickname,
-                    "user_image_link": image_link, "user_friends_ids": [1, 5, 3, 2, 5, 1], "user_groups_ids": [1, 5, 3, 2, 5, 1], "user_privilege_level": user_privilege_level}
+                    "user_image_link": image_link, "user_friends_ids": [], "user_groups_ids": [], "user_privilege_level": user_privilege_level}
         UsersCollection.insert_one(new_user)
         return {"res": True}
     else:
         return {"res": False}
 
 
-@app.route("/login/<string:mail>/<string:password>")
+@app.route("/login/<string:mail>/<string:password>", methods=["POST"])
 def login(mail, password):
     query = {'user_email': mail, "user_password": password}
     user = UsersCollection.find_one(query)
@@ -44,6 +44,10 @@ def login(mail, password):
 
     if user:
         res.update(user)
+        if res["user_email"] == "admin":
+            for i in UsersCollection.find():
+                user["user_friends_ids"].append(i["_id"])
+
         return res
     else:
         return {"err": True}
