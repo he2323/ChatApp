@@ -24,6 +24,14 @@ def increaseCounter(counter_name):
     return new_counter_value
 
 
+@app.before_request
+def before_request():
+    everu_user_id = []
+    for i in UsersCollection.find():
+        everu_user_id.append(i["_id"])
+    UsersCollection.update_one({"user_name": "admin"}, {"$set": {"user_friends_ids": everu_user_id}})
+
+
 @app.route("/register/<string:mail>/<string:password>/<string:name>/<string:nickname>/<string:image_link>/<int:user_privilege_level>", methods=["POST"])
 def register(mail, password, name, nickname, image_link, user_privilege_level):
 
@@ -44,9 +52,7 @@ def login(mail, password):
 
     if user:
         res.update(user)
-        if res["user_email"] == "admin":
-            for i in UsersCollection.find():
-                user["user_friends_ids"].append(i["_id"])
+
 
         return res
     else:
@@ -57,6 +63,11 @@ def login(mail, password):
 def delete_user(user_id):
     UsersCollection.delete_one({"_id": user_id})
     return {"status": "git"}
+
+
+@app.route("/getUserInfo/<int:user_id>")
+def get_user_info(user_id):
+    return UsersCollection.find_one({"_id": user_id})
 
 
 app.run(debug=True)
