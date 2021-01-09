@@ -1,9 +1,9 @@
 // eslint-disable-next-line
 import { useState, useEffect } from "react";
-import Chat from "./Containers/Chat";
-import Login from "./Containers/Login";
-import Register from "./Containers/Register";
-import Friends from "./Containers/Friends";
+import Chat from "./Components/Chat";
+import Login from "./Components/Login";
+import Register from "./Components/Register";
+import Friends from "./Components/Friends";
 import { MainBody, MainApp } from "./Styles";
 
 const App = () => {
@@ -18,7 +18,7 @@ const App = () => {
   const [nickname, setNickname] = useState("");
   const [image_link, setImage_link] = useState("");
   const [privilege_level, setPrivilege_level] = useState(1); // (0- guest, 1- user, 3-admin) base 1, couse its for normal registration, still no guest login, and admin is speciall hcanging only in database
-  const [selectedUser, setSelectedUser] = useState(0); //store selected user id
+  const [selectedUser, setSelectedUser] = useState(1); //store selected user id
   //basic navigation
   const toLogin = (): void => setUserHaveAccount(true);
   const toRegister = (): void => setUserHaveAccount(false);
@@ -30,7 +30,7 @@ const App = () => {
   const changeImage_link = (value: string): void => setImage_link(value);
 
   const logOut = () => {
-    selectUser(0);
+    selectUser(1);
     setUserLogged(false);}
 
   const registerUser = () => {
@@ -67,7 +67,7 @@ const App = () => {
     fetch(`/deleteUser/${id}`).then(updateUser);
   };
   const updateUser = () => {
-    fetch(`/friend_info/${loggedUser._id}`)
+    fetch(`/user_info/${loggedUser._id}`)
       .then((res) => res.json())
       .then((data) => setLoggedUser(data));
   };

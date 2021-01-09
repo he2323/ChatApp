@@ -9,13 +9,13 @@ interface FrienI {
 const Friend = ({ friend_id, priv_lvl, delete_user,selectUser }: FrienI) => {
   const [user, setUser] = useState({});
   useEffect(() => {
-    fetch(`/friend_info/${friend_id}`)
+    fetch(`/user_info/${friend_id}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(Date.now());
         setUser(data);
       });
-  }, []);
+  }, [friend_id]);
   return (
     <Person onClick={()=>selectUser(friend_id)}>
       <FriendImage src={user.user_image_link} alt="friend image" />

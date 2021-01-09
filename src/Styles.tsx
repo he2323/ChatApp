@@ -29,6 +29,8 @@ export const ChoosenPerson = styled.div`
   background-color: grey;
   box-shadow: 0px 2px cadetblue;
   margin-bottom: 2px;
+  display:flex;
+  flex-direction: row;
 `;
 export const ActualChat = styled.div`
   width: 100%;

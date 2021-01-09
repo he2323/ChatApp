@@ -63,14 +63,14 @@ def delete_user(user_id):
     return {"status": "git"}
 
 
-@app.route("/friend_info/<int:user_id>")
-def friend_info(user_id):
+@app.route("/user_info/<int:user_id>")
+def user_info(user_id):
     return UsersCollection.find_one({"_id": user_id})
 
 
 app.run(debug=True)
 """
-users:
+users:s
   user_id, user_email, user_password, user_name, user_nickname, user_image_link, user_friends: [friends_id], user_groups_id: [group_id], user_privilege_level
 groups:
   group_id, group_name, group_members_id: [user_id]
