@@ -5,13 +5,13 @@ import Login from "./Containers/Login";
 import Register from "./Containers/Register";
 import Friends from "./Containers/Friends";
 import { MainBody, MainApp } from "./Styles";
-import userEvent from "@testing-library/user-event";
+
 const App = () => {
   //data to store
   const [userLogged, setUserLogged] = useState(false);
-  const [loggedUser, setLoggedUser] = useState({user_friends_ids: []});
+  const [loggedUser, setLoggedUser] = useState({ user_friends_ids: [] });
   const [userHaveAccount, setUserHaveAccount] = useState(true);
-  const [userFriends, setUserFriends] = useState([])
+  const [userFriends, setUserFriends] = useState([]);
   const [mail, setMail] = useState("admin");
   const [password, setPassword] = useState("admin");
   const [name, setName] = useState("");
@@ -33,8 +33,7 @@ const App = () => {
 
   const registerUser = () => {
     fetch(
-      `/register/${mail}/${password}/${name}/${nickname}/${image_link}>/${privilege_level}`,
-      { method: "POST" }
+      `/register/${mail}/${password}/${name}/${nickname}/${image_link}>/${privilege_level}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -49,7 +48,7 @@ const App = () => {
 
   const logIn = () => {
     if (mail.length > 0 && password.length > 0) {
-      fetch(`/login/${mail}/${password}`, { method: "POST" })
+      fetch(`/login/${mail}/${password}`)
         .then((response) => response.json())
         .then((data) => {
           if (data.err === false) {
@@ -62,31 +61,20 @@ const App = () => {
         });
     } else alert("to short");
   };
-  const deleteUser = (id: number) => fetch(`/deleteUser/${id}`);
-
-  useEffect(() => {
-    loggedUser.user_friends_ids.map((id: number) => {
-      fetch(`/getUserInfo/${id}`).then((res) => res.json()).then((data) => {
-        console.log(data);
-        setUserFriends([...userFriends, data])})
-    })
-  }, [loggedUser])
+  const deleteUser = (id: number) => {
+    fetch(`/deleteUser/${id}`).then(updateFriends)
+  };
+  const updateFriends = () =>{
+    fetch(`/friend_info/${loggedUser._id}`).then(res=>res.json()).then(data=>setLoggedUser(data))
+  }
   return (
     <MainBody>
       {userLogged ? (
         <MainApp>
           <Friends
-            _id={loggedUser._id}
-            user_email={loggedUser.user_email}
-            user_password={loggedUser.user_password}
-            user_name={loggedUser.user_name}
-            user_nickname={loggedUser.user_nickname}
-            user_image_link={loggedUser.user_image_link}
-            user_friends={userFriends}
-            user_groups_ids={loggedUser.user_groups_ids}
+            user_friends={loggedUser.user_friends_ids}
             user_privilege_level={loggedUser.user_privilege_level}
-            err={loggedUser.err}
-            delete_user = {deleteUser}
+            delete_user={deleteUser}
           ></Friends>
           <Chat logOut={logOut}></Chat>
         </MainApp>

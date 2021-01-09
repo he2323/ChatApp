@@ -168,3 +168,9 @@ export const LoginButton = styled.button`
   background-color: lime;
   border: none;
 `;
+
+export const FriendImage = styled.img`
+border-radius: 75px;
+margin-left: 5%;
+height:75%;
+`

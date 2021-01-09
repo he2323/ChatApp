@@ -24,3 +24,10 @@ __pycache__
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+api/.idea/.gitignore
+api/.idea/api.iml
+api/.idea/misc.xml
+api/.idea/modules.xml
+api/.idea/vcs.xml
+api/.idea/inspectionProfiles/profiles_settings.xml
+.eslintcache

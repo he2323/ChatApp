@@ -1,9 +1,6 @@
 from flask import Flask
 from pymongo import MongoClient
 import sys
-from bson import json_util
-import json
-
 
 app = Flask(__name__)
 
@@ -26,35 +23,36 @@ def increaseCounter(counter_name):
 
 @app.before_request
 def before_request():
-    everu_user_id = []
+    every_user_id = []
     for i in UsersCollection.find():
-        everu_user_id.append(i["_id"])
-    UsersCollection.update_one({"user_name": "admin"}, {"$set": {"user_friends_ids": everu_user_id}})
+        every_user_id.append(i["_id"])
+    UsersCollection.update_one({"user_name": "admin"}, {"$set": {"user_friends_ids": every_user_id}})
 
 
-@app.route("/register/<string:mail>/<string:password>/<string:name>/<string:nickname>/<string:image_link>/<int:user_privilege_level>", methods=["POST"])
+@app.route(
+    "/register/<string:mail>/<string:password>/<string:name>/<string:nickname>/<string:image_link>/<int:user_privilege_level>")
 def register(mail, password, name, nickname, image_link, user_privilege_level):
-
-    if ("@" in mail or mail == "admin") and len(mail) >= 5 and (len(password) >= 8 or password == "admin") and len(name) > 0 and int(user_privilege_level) > 0:
-        new_user = {"_id": increaseCounter("users"), "user_email": mail, "user_password": password, "user_name": name, "user_nickname": nickname,
-                    "user_image_link": image_link, "user_friends_ids": [], "user_groups_ids": [], "user_privilege_level": user_privilege_level}
+    if ("@" in mail or mail == "admin") and len(mail) >= 5 and (len(password) >= 8 or password == "admin") and len(
+            name) > 0 and int(user_privilege_level) > 0:
+        new_user = {"_id": increaseCounter("users"), "user_email": mail, "user_password": password, "user_name": name,
+                    "user_nickname": nickname,
+                    "user_image_link": image_link, "user_friends_ids": [], "user_groups_ids": [],
+                    "user_privilege_level": user_privilege_level}
         UsersCollection.insert_one(new_user)
         return {"res": True}
     else:
         return {"res": False}
 
 
-@app.route("/login/<string:mail>/<string:password>", methods=["POST"])
+@app.route("/login/<string:mail>/<string:password>")
 def login(mail, password):
     query = {'user_email': mail, "user_password": password}
+
     user = UsersCollection.find_one(query)
-    res = {'err': False}
 
     if user:
-        res.update(user)
-
-
-        return res
+        user["err"] = False
+        return user
     else:
         return {"err": True}
 
@@ -65,8 +63,8 @@ def delete_user(user_id):
     return {"status": "git"}
 
 
-@app.route("/getUserInfo/<int:user_id>")
-def get_user_info(user_id):
+@app.route("/friend_info/<int:user_id>")
+def friend_info(user_id):
     return UsersCollection.find_one({"_id": user_id})
 
 

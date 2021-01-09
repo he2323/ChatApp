@@ -1,5 +1,6 @@
-import userEvent from "@testing-library/user-event";
+import React from "react";
 import { useState, useEffect } from "react";
+import Friend from "./Friend";
 import {
   ContactsList,
   GroupChoose,
@@ -8,59 +9,32 @@ import {
   Person,
 } from "../Styles";
 export interface UserO {
-  _id: number;
-  user_email: string;
-  user_password: string;
-  user_name: string;
-  user_nickname: string;
-  user_image_link: string;
-  user_friends: UserI[];
-  user_groups_ids: number[];
+  user_friends: number[];
+
   user_privilege_level: number;
-  err: Boolean;
-  delete_user: (id: number) => Promise<Response>;
+
+  delete_user: (id: number) => any;
 }
-interface UserI {
-  _id: number;
-  user_email: string;
-  user_password: string;
-  user_name: string;
-  user_nickname: string;
-  user_image_link: string;
-  user_friends: UserI[];
-  user_groups_ids: number[];
-  user_privilege_level: number;
-  err: Boolean;
-}
+
 const Friends = ({
-  _id,
-  user_email,
-  user_password,
-  user_name,
-  user_nickname,
-  user_image_link,
   user_friends,
-  user_groups_ids,
   user_privilege_level,
-  err,
   delete_user,
 }: UserO) => {
   return (
     <ContactsList>
       <GroupChoose></GroupChoose>
       <SearchBar></SearchBar>
-
+      <button onClick={() => console.log(user_friends)}>Friends</button>
       <Constacts big={user_friends.length > 10 ? 1 : 0}>
-        {user_friends.map((friend) => {
+        {user_friends.map((friend: any) => {
           return (
-            <Person key={friend}>
-              {friend._id}
-              {user_privilege_level === 3 && _id !== 1 ? (
-                <button onClick={() => delete_user(_id)}>
-                  del user {user_name}
-                </button>
-              ) : null}
-            </Person>
+            <Friend
+              friend_id={friend}
+              delete_user={delete_user}
+              key={friend}
+              priv_lvl={user_privilege_level}
+            />
           );
         })}
       </Constacts>
