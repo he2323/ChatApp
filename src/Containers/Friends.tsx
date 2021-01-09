@@ -6,19 +6,19 @@ import {
   GroupChoose,
   SearchBar,
   Constacts,
-  Person,
 } from "../Styles";
 export interface UserO {
   user_friends: number[];
 
   user_privilege_level: number;
-
-  delete_user: (id: number) => any;
+  selectUser: (id:number)=>any;
+  delete_user: (id: number)=>any;
 }
 
 const Friends = ({
   user_friends,
   user_privilege_level,
+  selectUser,
   delete_user,
 }: UserO) => {
   return (
@@ -31,6 +31,7 @@ const Friends = ({
           return (
             <Friend
               friend_id={friend}
+              selectUser = {selectUser}
               delete_user={delete_user}
               key={friend}
               priv_lvl={user_privilege_level}

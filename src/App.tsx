@@ -18,6 +18,7 @@ const App = () => {
   const [nickname, setNickname] = useState("");
   const [image_link, setImage_link] = useState("");
   const [privilege_level, setPrivilege_level] = useState(1); // (0- guest, 1- user, 3-admin) base 1, couse its for normal registration, still no guest login, and admin is speciall hcanging only in database
+  const [selectedUser, setSelectedUser] = useState(0); //store selected user id
   //basic navigation
   const toLogin = (): void => setUserHaveAccount(true);
   const toRegister = (): void => setUserHaveAccount(false);
@@ -28,8 +29,9 @@ const App = () => {
   const changeNickname = (value: string): void => setNickname(value);
   const changeImage_link = (value: string): void => setImage_link(value);
 
-  const logOut = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-    setUserLogged(false);
+  const logOut = () => {
+    selectUser(0);
+    setUserLogged(false);}
 
   const registerUser = () => {
     fetch(
@@ -37,7 +39,7 @@ const App = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        if (data.res === true) {
+        if (data.res) {
           console.log("udało się utworzyć użytkownia");
           toLogin();
         } else {
@@ -62,11 +64,16 @@ const App = () => {
     } else alert("to short");
   };
   const deleteUser = (id: number) => {
-    fetch(`/deleteUser/${id}`).then(updateFriends)
+    fetch(`/deleteUser/${id}`).then(updateUser);
   };
-  const updateFriends = () =>{
-    fetch(`/friend_info/${loggedUser._id}`).then(res=>res.json()).then(data=>setLoggedUser(data))
-  }
+  const updateUser = () => {
+    fetch(`/friend_info/${loggedUser._id}`)
+      .then((res) => res.json())
+      .then((data) => setLoggedUser(data));
+  };
+  const selectUser = (id: number) => {
+    setSelectedUser(id);
+  };
   return (
     <MainBody>
       {userLogged ? (
@@ -75,8 +82,9 @@ const App = () => {
             user_friends={loggedUser.user_friends_ids}
             user_privilege_level={loggedUser.user_privilege_level}
             delete_user={deleteUser}
+            selectUser={selectUser}
           ></Friends>
-          <Chat logOut={logOut}></Chat>
+          <Chat logOut={logOut} selectedUser={selectedUser} loggedUserId={loggedUser._id}></Chat>
         </MainApp>
       ) : userHaveAccount ? (
         <Login
@@ -94,7 +102,7 @@ const App = () => {
           name={name}
           nickname={nickname}
           image_link={image_link}
-          register={() => registerUser()}
+          register={registerUser}
           toLogin={toLogin}
           changeMail={(value: string) => changeMail(value)}
           changePassword={(value: string) => changePassword(value)}

@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 interface FrienI {
   friend_id: number;
   priv_lvl: number;
+  selectUser: (id:number)=>any;
   delete_user: (id: number) => Promise<Response>;
 }
-const Friend = ({ friend_id, priv_lvl, delete_user }: FrienI) => {
+const Friend = ({ friend_id, priv_lvl, delete_user,selectUser }: FrienI) => {
   const [user, setUser] = useState({});
   useEffect(() => {
     fetch(`/friend_info/${friend_id}`)
@@ -16,7 +17,7 @@ const Friend = ({ friend_id, priv_lvl, delete_user }: FrienI) => {
       });
   }, []);
   return (
-    <Person>
+    <Person onClick={()=>selectUser(friend_id)}>
       <FriendImage src={user.user_image_link} alt="friend image" />
       {user.user_name}
       {priv_lvl === 3 && user._id !== 1 ? (

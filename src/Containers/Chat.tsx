@@ -6,11 +6,17 @@ import {
   MsgHandle,
 } from "../Styles";
 
-const Chat = (props: any): JSX.Element => {
+interface ChatI{
+  logOut: () => any;
+  selectedUser: number;
+  loggedUserId: number;
+}
+
+const Chat = ({logOut, selectedUser, loggedUserId}:ChatI) => {
   return (
     <ChatMain>
       <ChoosenPerson>
-        <button onClick={props.logOut}>logOut</button>
+        <button onClick={logOut}>logOut</button>
       </ChoosenPerson>
       <ActualChat>
         <Message loggedUser={0}>somerandom text shit</Message>
@@ -20,6 +26,7 @@ const Chat = (props: any): JSX.Element => {
         <Message loggedUser={1}>somerandom text shit</Message>
         <Message loggedUser={0}>somerandom text shit</Message>
         <Message loggedUser={1}>somerandom text shit</Message>
+        <button onClick={()=> console.log(selectedUser)}>selected user log</button>
       </ActualChat>
       <MsgHandle></MsgHandle>
     </ChatMain>

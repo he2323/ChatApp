@@ -30,7 +30,7 @@ def before_request():
 
 
 @app.route(
-    "/register/<string:mail>/<string:password>/<string:name>/<string:nickname>/<string:image_link>/<int:user_privilege_level>")
+    "/register/<path:mail>/<string:password>/<string:name>/<string:nickname>/<path:image_link>/<int:user_privilege_level>")
 def register(mail, password, name, nickname, image_link, user_privilege_level):
     if ("@" in mail or mail == "admin") and len(mail) >= 5 and (len(password) >= 8 or password == "admin") and len(
             name) > 0 and int(user_privilege_level) > 0:
