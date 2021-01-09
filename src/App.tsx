@@ -29,8 +29,9 @@ const App = () => {
   const changeNickname = (value: string): void => setNickname(value);
   const changeImage_link = (value: string): void => setImage_link(value);
 
+  const changeUserStatus = (id:number) =>fetch(`/status_change/${id}`);
   const logOut = () => {
-    fetch(`/status_change/${loggedUser._id}`);
+    changeUserStatus(loggedUser._id);
     selectUser(1);
     setUserLogged(false);}
 
@@ -57,7 +58,7 @@ const App = () => {
           if (data.err === false) {
             setLoggedUser(data);
             setUserLogged(true);
-            fetch(`/status_change/${data._id}`);
+            changeUserStatus(data._id);
           } else {
             alert("bad pass or mail");
           }
@@ -91,8 +92,8 @@ const App = () => {
         <Login
           mail={mail}
           password={password}
-          changeMail={(value: string) => changeMail(value)}
-          changePassword={(value: string) => changePassword(value)}
+          changeMail={changeMail}
+          changePassword={changePassword}
           toRegister={toRegister}
           logIn={logIn}
         ></Login>
@@ -105,11 +106,11 @@ const App = () => {
           image_link={image_link}
           register={registerUser}
           toLogin={toLogin}
-          changeMail={(value: string) => changeMail(value)}
-          changePassword={(value: string) => changePassword(value)}
-          changeName={(value: string) => changeName(value)}
-          changeNickname={(value: string) => changeNickname(value)}
-          changeImage_link={(value: string) => changeImage_link(value)}
+          changeMail={changeMail}
+          changePassword={changePassword}
+          changeName={changeName}
+          changeNickname={changeNickname}
+          changeImage_link={changeImage_link}
         ></Register>
       )}
     </MainBody>

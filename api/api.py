@@ -38,7 +38,8 @@ def register(mail, password, name, nickname, image_link, user_privilege_level):
         new_user = {"_id": increaseCounter("users"), "user_email": mail, "user_password": password, "user_name": name,
                     "user_nickname": nickname,
                     "user_image_link": image_link, "user_friends_ids": [], "user_groups_ids": [],
-                    "user_privilege_level": user_privilege_level, "user_create_date": date.today().strftime("%d/%m/%Y"), "status": False}
+                    "user_privilege_level": user_privilege_level, "user_create_date": date.today().strftime("%d/%m/%Y"),
+                    "status": False}
         UsersCollection.insert_one(new_user)
         return {"res": True}
     else:
@@ -69,6 +70,13 @@ def user_info(user_id):
     return UsersCollection.find_one({"_id": user_id})
 
 
+@app.route("/friend_info/<int:user_id>")
+def friend_info(user_id):
+    user = UsersCollection.find_one({"_id": user_id})
+    res = {"image_link": user["user_image_link"], "name": user["user_name"]}
+    return res
+
+
 @app.route("/status_change/<int:user_id>")
 def status_change(user_id):
     query = {'_id': user_id}
@@ -76,7 +84,6 @@ def status_change(user_id):
     user_status = user["status"]
     UsersCollection.update_one({"_id": user_id}, {"$set": {"status": not user_status}})
     return "git"
-
 
 app.run(debug=True)
 """
