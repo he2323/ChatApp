@@ -30,12 +30,13 @@ const App = () => {
   const changeImage_link = (value: string): void => setImage_link(value);
 
   const logOut = () => {
+    fetch(`/status_change/${loggedUser._id}`);
     selectUser(1);
     setUserLogged(false);}
 
   const registerUser = () => {
     fetch(
-      `/register/${mail}/${password}/${name}/${nickname}/${image_link}>/${privilege_level}`
+      `/register/${mail}/${password}/${name}/${nickname}/${image_link}/${privilege_level}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -56,8 +57,8 @@ const App = () => {
           if (data.err === false) {
             setLoggedUser(data);
             setUserLogged(true);
+            fetch(`/status_change/${data._id}`);
           } else {
-            console.log(data);
             alert("bad pass or mail");
           }
         });

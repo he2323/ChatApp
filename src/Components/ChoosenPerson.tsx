@@ -11,7 +11,6 @@ const ChoosenPerson = ({logOut,user_name,user_image}: choosenI) => {
       <button onClick={logOut}>logOut</button>
       <div>{user_name}</div>
       <div>{user_image}</div>
-
   </PersonDiv>;
 };
 

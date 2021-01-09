@@ -1,6 +1,6 @@
 import { Person, FriendImage } from "../Styles";
 import { useState, useEffect } from "react";
-interface FrienI {
+export interface FrienI {
   friend_id: number;
   priv_lvl: number;
   selectUser: (id:number)=>any;

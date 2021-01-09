@@ -1,18 +1,11 @@
 import React from "react";
-import { useState, useEffect } from "react";
 import Friend from "./Friend";
-import {
-  ContactsList,
-  GroupChoose,
-  SearchBar,
-  Constacts,
-} from "../Styles";
+import { ContactsList, GroupChoose, SearchBar, Constacts } from "../Styles";
 export interface UserO {
   user_friends: number[];
-
   user_privilege_level: number;
-  selectUser: (id:number)=>any;
-  delete_user: (id: number)=>any;
+  selectUser: (id: number) => any;
+  delete_user: (id: number) => any;
 }
 
 const Friends = ({
@@ -27,11 +20,11 @@ const Friends = ({
       <SearchBar></SearchBar>
       <button onClick={() => console.log(user_friends)}>Friends</button>
       <Constacts big={user_friends.length > 10 ? 1 : 0}>
-        {user_friends.map((friend: any) => {
+        {user_friends.map((friend: number) => {
           return (
             <Friend
               friend_id={friend}
-              selectUser = {selectUser}
+              selectUser={selectUser}
               delete_user={delete_user}
               key={friend}
               priv_lvl={user_privilege_level}

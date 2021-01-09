@@ -1,5 +1,6 @@
 from flask import Flask
 from pymongo import MongoClient
+from datetime import date
 import sys
 
 app = Flask(__name__)
@@ -13,11 +14,11 @@ MessagesCollection = Database["messages"]
 
 
 def increaseCounter(counter_name):
-    counter_quary = {"counter_name": counter_name}
-    actual_counter_value = CountersCollection.find_one(counter_quary)
+    counter_query = {"counter_name": counter_name}
+    actual_counter_value = CountersCollection.find_one(counter_query)
     new_counter_value = actual_counter_value["counter_value"] + 1
     CountersCollection.update_one(
-        counter_quary, {"$set": {"counter_value": new_counter_value}})
+        counter_query, {"$set": {"counter_value": new_counter_value}})
     return new_counter_value
 
 
@@ -37,7 +38,7 @@ def register(mail, password, name, nickname, image_link, user_privilege_level):
         new_user = {"_id": increaseCounter("users"), "user_email": mail, "user_password": password, "user_name": name,
                     "user_nickname": nickname,
                     "user_image_link": image_link, "user_friends_ids": [], "user_groups_ids": [],
-                    "user_privilege_level": user_privilege_level}
+                    "user_privilege_level": user_privilege_level, "user_create_date": date.today().strftime("%d/%m/%Y"), "status": False}
         UsersCollection.insert_one(new_user)
         return {"res": True}
     else:
@@ -66,6 +67,15 @@ def delete_user(user_id):
 @app.route("/user_info/<int:user_id>")
 def user_info(user_id):
     return UsersCollection.find_one({"_id": user_id})
+
+
+@app.route("/status_change/<int:user_id>")
+def status_change(user_id):
+    query = {'_id': user_id}
+    user = UsersCollection.find_one(query)
+    user_status = user["status"]
+    UsersCollection.update_one({"_id": user_id}, {"$set": {"status": not user_status}})
+    return "git"
 
 
 app.run(debug=True)
