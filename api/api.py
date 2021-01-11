@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from pymongo import MongoClient
 from datetime import date
 import sys
@@ -30,15 +30,19 @@ def before_request():
     UsersCollection.update_one({"user_name": "admin"}, {"$set": {"user_friends_ids": every_user_id}})
 
 
-@app.route(
-    "/register/<path:mail>/<string:password>/<string:name>/<string:nickname>/<path:image_link>/<int:user_privilege_level>")
-def register(mail, password, name, nickname, image_link, user_privilege_level):
-    if ("@" in mail or mail == "admin") and len(mail) >= 5 and (len(password) >= 8 or password == "admin") and len(
-            name) > 0 and int(user_privilege_level) > 0:
-        new_user = {"_id": increaseCounter("users"), "user_email": mail, "user_password": password, "user_name": name,
-                    "user_nickname": nickname,
-                    "user_image_link": image_link, "user_friends_ids": [], "user_groups_ids": [],
-                    "user_privilege_level": user_privilege_level, "user_create_date": date.today().strftime("%d/%m/%Y"),
+@app.route("/register", methods=['POST'])
+def register():
+    data = request.json
+    print(data, file=sys.stdout)
+    if ("@" in data["mail"] or data["mail"] == "admin") and len(data["mail"]) >= 5 and (
+            len(data["password"]) >= 8 or data["password"] == "admin") and len(
+        data["name"]) > 0 and int(data["privilege_level"]) > 0:
+        new_user = {"_id": increaseCounter("users"), "user_email": data["mail"], "user_password": data["password"],
+                    "user_name": data["name"],
+                    "user_nickname": data['nickname'],
+                    "user_image_link": data['image_link'], "user_friends_ids": [], "user_groups_ids": [],
+                    "user_privilege_level": data['privilege_level'],
+                    "user_create_date": date.today().strftime("%d/%m/%Y"),
                     "status": False}
         UsersCollection.insert_one(new_user)
         return {"res": True}
@@ -46,9 +50,10 @@ def register(mail, password, name, nickname, image_link, user_privilege_level):
         return {"res": False}
 
 
-@app.route("/login/<string:mail>/<string:password>")
-def login(mail, password):
-    query = {'user_email': mail, "user_password": password}
+@app.route("/login", methods=['POST'])
+def login():
+    data = request.json
+    query = {'user_email': data['mail'], "user_password": data['password']}
 
     user = UsersCollection.find_one(query)
 
@@ -59,9 +64,10 @@ def login(mail, password):
         return {"err": True}
 
 
-@app.route("/deleteUser/<int:user_id>")
-def delete_user(user_id):
-    UsersCollection.delete_one({"_id": user_id})
+@app.route("/deleteUser", methods=['POST'])
+def delete_user():
+    data = request.json
+    UsersCollection.delete_one({"_id": data['id']})
     return {"status": "git"}
 
 
@@ -84,6 +90,7 @@ def status_change(user_id):
     user_status = user["status"]
     UsersCollection.update_one({"_id": user_id}, {"$set": {"status": not user_status}})
     return "git"
+
 
 app.run(debug=True)
 """

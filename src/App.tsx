@@ -7,6 +7,7 @@ import Friends from "./Components/Friends";
 import { MainBody, MainApp } from "./Styles";
 
 const App = () => {
+
   //data to store
   const [userLogged, setUserLogged] = useState(false);
   const [loggedUser, setLoggedUser] = useState({ user_friends_ids: [] });
@@ -29,44 +30,66 @@ const App = () => {
   const changeNickname = (value: string): void => setNickname(value);
   const changeImage_link = (value: string): void => setImage_link(value);
 
-  const changeUserStatus = (id:number) =>fetch(`/status_change/${id}`);
+  const changeUserStatus = (id: number) => fetch(`/status_change/${id}`);
   const logOut = () => {
     changeUserStatus(loggedUser._id);
     selectUser(1);
-    setUserLogged(false);}
-
-  const registerUser = () => {
-    fetch(
-      `/register/${mail}/${password}/${name}/${nickname}/${image_link}/${privilege_level}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.res) {
-          console.log("udało się utworzyć użytkownia");
-          toLogin();
-        } else {
-          console.log("nie udało się utworzyć użytkownia");
-        }
-      });
+    setUserLogged(false);
   };
 
-  const logIn = () => {
+  const registerUser = async () => {
+    const datas = {
+      mail: mail,
+      password: password,
+      name: name,
+      nickname: nickname,
+      image_link: image_link,
+      privilege_level: privilege_level,
+    };
+    const response = await fetch(`/register`, {
+      method: "POST",
+      headers: {
+        content_type: "application/json",
+      },
+      body: JSON.stringify(datas),
+    });
+    const data = await response.json();
+    if (data.res) {
+      console.log("udało się utworzyć użytkownia");
+      toLogin();
+    } else {
+      console.log("nie udało się utworzyć użytkownia");
+    }
+  };
+
+  const logIn = async () => {
     if (mail.length > 0 && password.length > 0) {
-      fetch(`/login/${mail}/${password}`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.err === false) {
-            setLoggedUser(data);
-            setUserLogged(true);
-            changeUserStatus(data._id);
-          } else {
-            alert("bad pass or mail");
-          }
-        });
+      const datas = { mail: mail, password: password };
+      const response = await fetch(`/login`, {
+        method: "POST",
+        headers: {
+          content_type: "application/json",
+        },
+        body: JSON.stringify(datas),
+      });
+      const data = await response.json();
+      if (data.err === false) {
+        setLoggedUser(data);
+        setUserLogged(true);
+        changeUserStatus(data._id);
+      } else {
+        alert("bad pass or mail");
+      }
     } else alert("to short");
   };
   const deleteUser = (id: number) => {
-    fetch(`/deleteUser/${id}`).then(updateUser);
+    fetch(`/deleteUser`, {
+      method: "POST",
+      headers: {
+        content_type: "application/json",
+      },
+      body: JSON.stringify({ id: id }),
+    }).then(updateUser);
   };
   const updateUser = () => {
     fetch(`/user_info/${loggedUser._id}`)
@@ -76,6 +99,17 @@ const App = () => {
   const selectUser = (id: number) => {
     setSelectedUser(id);
   };
+  
+  const setupBeforeUnloadListener = () => {
+    window.addEventListener("beforeunload", (ev) => {
+      ev.preventDefault();
+      return logOut();
+    });
+  };
+
+  useEffect(() => {
+    setupBeforeUnloadListener();
+  }, [userLogged]);
   return (
     <MainBody>
       {userLogged ? (
@@ -86,7 +120,11 @@ const App = () => {
             delete_user={deleteUser}
             selectUser={selectUser}
           ></Friends>
-          <Chat logOut={logOut} selectedUser={selectedUser} loggedUserId={loggedUser._id}></Chat>
+          <Chat
+            logOut={logOut}
+            selectedUser={selectedUser}
+            loggedUserId={loggedUser._id}
+          ></Chat>
         </MainApp>
       ) : userHaveAccount ? (
         <Login
