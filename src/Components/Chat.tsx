@@ -20,7 +20,13 @@ const Chat = ({ logOut, selectedUser, loggedUserId }: ChatI) => {
   const [sUserInfo, setSUserInfo] = useState({});
   const [messages, setMessages] = useState([]);
   useEffect(() => {
-    fetch(`/user_info/${selectedUser}`)
+    fetch(`/user_info`, {
+      method: "POST",
+      headers: {
+        content_type: "application/json",
+      },
+      body: JSON.stringify({ id: selectedUser }),
+    })
       .then((res) => res.json())
       .then((data) => setSUserInfo(data));
     console.log(`select user time: ${Date.now()}`);

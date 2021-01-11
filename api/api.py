@@ -71,24 +71,27 @@ def delete_user():
     return {"status": "git"}
 
 
-@app.route("/user_info/<int:user_id>")
-def user_info(user_id):
-    return UsersCollection.find_one({"_id": user_id})
+@app.route("/user_info", methods=['POST'])
+def user_info():
+    data = request.json
+    return UsersCollection.find_one({"_id": data['id']})
 
 
-@app.route("/friend_info/<int:user_id>")
-def friend_info(user_id):
-    user = UsersCollection.find_one({"_id": user_id})
+@app.route("/friend_info", methods=['POST'])
+def friend_info():
+    data = request.json
+    user = UsersCollection.find_one({"_id": data['id']})
     res = {"image_link": user["user_image_link"], "name": user["user_name"]}
     return res
 
 
-@app.route("/status_change/<int:user_id>")
-def status_change(user_id):
-    query = {'_id': user_id}
+@app.route("/status_change", methods=['POST'])
+def status_change():
+    data = request.json
+    query = {'_id': data['id']}
     user = UsersCollection.find_one(query)
     user_status = user["status"]
-    UsersCollection.update_one({"_id": user_id}, {"$set": {"status": not user_status}})
+    UsersCollection.update_one({"_id": data['id']}, {"$set": {"status": not user_status}})
     return "git"
 
 

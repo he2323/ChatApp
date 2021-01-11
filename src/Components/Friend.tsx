@@ -9,7 +9,13 @@ export interface FrienI {
 const Friend = ({ friend_id, priv_lvl, delete_user, selectUser }: FrienI) => {
   const [user, setUser] = useState({});
   useEffect(() => {
-    fetch(`/friend_info/${friend_id}`)
+    fetch(`/friend_info`, {
+      method: "POST",
+      headers: {
+        content_type: "application/json",
+      },
+      body: JSON.stringify({ id: friend_id }),
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log(Date.now());

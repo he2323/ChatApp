@@ -7,7 +7,6 @@ import Friends from "./Components/Friends";
 import { MainBody, MainApp } from "./Styles";
 
 const App = () => {
-
   //data to store
   const [userLogged, setUserLogged] = useState(false);
   const [loggedUser, setLoggedUser] = useState({ user_friends_ids: [] });
@@ -30,7 +29,14 @@ const App = () => {
   const changeNickname = (value: string): void => setNickname(value);
   const changeImage_link = (value: string): void => setImage_link(value);
 
-  const changeUserStatus = (id: number) => fetch(`/status_change/${id}`);
+  const changeUserStatus = (id: number) =>
+    fetch(`/status_change`, {
+      method: "POST",
+      headers: {
+        content_type: "application/json",
+      },
+      body: JSON.stringify({ id: id }),
+    });
   const logOut = () => {
     changeUserStatus(loggedUser._id);
     selectUser(1);
@@ -92,14 +98,20 @@ const App = () => {
     }).then(updateUser);
   };
   const updateUser = () => {
-    fetch(`/user_info/${loggedUser._id}`)
+    fetch(`/user_info`, {
+      method: "POST",
+      headers: {
+        content_type: "application/json",
+      },
+      body: JSON.stringify({ id: loggedUser._id }),
+    })
       .then((res) => res.json())
       .then((data) => setLoggedUser(data));
   };
   const selectUser = (id: number) => {
     setSelectedUser(id);
   };
-  
+
   const setupBeforeUnloadListener = () => {
     window.addEventListener("beforeunload", (ev) => {
       ev.preventDefault();
