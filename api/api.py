@@ -77,24 +77,41 @@ def user_info():
     return UsersCollection.find_one({"_id": data['id']})
 
 
-@app.route("/friend_info", methods=['POST'])
-def friend_info():
+@app.route("/friends_info", methods=['POST'])
+def friends_info():
     data = request.json
-    user = UsersCollection.find_one({"_id": data['id']})
-    res = {"image_link": user["user_image_link"], "name": user["user_name"]}
-    return res
+    res = []
+    for id in data['ids']:
+        user = UsersCollection.find_one({"_id": id})
+        res.append({"id": user['_id'], "image_link": user["user_image_link"], "name": user["user_name"]})
+    return {'list': res}
 
 
 @app.route("/status_change", methods=['POST'])
 def status_change():
     data = request.json
-    query = {'_id': data['id']}
-    user = UsersCollection.find_one(query)
-    user_status = user["status"]
-    UsersCollection.update_one({"_id": data['id']}, {"$set": {"status": not user_status}})
-    return "git"
+    app.logger.info(f"stat change for: {data}")
+    if data:
+        query = {'_id': data['id']}
+        user = UsersCollection.find_one(query)
+        user_status = user["status"]
+        UsersCollection.update_one({"_id": data['id']}, {"$set": {"status": not user_status}})
+        return "git"
+    return "nie git"
 
 
+@app.route("/messages", methods=['POST'])
+def messages():
+    data = request.json
+    query = {'message_group_id': data['group_id']}
+    message = MessagesCollection.find(query)
+
+
+# def get_users():
+#     app.logger.warning(list(UsersCollection.find()))
+#
+#
+# get_users()
 app.run(debug=True)
 """
 users:s
@@ -102,7 +119,7 @@ users:s
 groups:
   group_id, group_name, group_members_id: [user_id]
 messages:
-  message_id, message_sender_id, message_group_id, message_text, message_type, message_img_link, message_send_date,
+  message_id, message_sender_id, message_group_id, message_text, message_type, message_img_link, message_send_date, message_send_time
 counters:
   counter_id, counter_name, counter_value
 

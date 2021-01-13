@@ -1,5 +1,6 @@
 // eslint-disable-next-line
 import { useState, useEffect } from "react";
+import { useBeforeunload } from "react-beforeunload";
 import Chat from "./Components/Chat";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
@@ -9,14 +10,14 @@ import { MainBody, MainApp } from "./Styles";
 const App = () => {
   //data to store
   const [userLogged, setUserLogged] = useState(false);
-  const [loggedUser, setLoggedUser] = useState({ user_friends_ids: [] });
+  const [loggedUser, setLoggedUser] = useState({});
   const [userHaveAccount, setUserHaveAccount] = useState(true);
-  const [userFriends, setUserFriends] = useState([]);
   const [mail, setMail] = useState("admin");
   const [password, setPassword] = useState("admin");
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [image_link, setImage_link] = useState("");
+  // eslint-disable-next-line
   const [privilege_level, setPrivilege_level] = useState(1); // (0- guest, 1- user, 3-admin) base 1, couse its for normal registration, still no guest login, and admin is speciall hcanging only in database
   const [selectedUser, setSelectedUser] = useState(1); //store selected user id
   //basic navigation
@@ -41,6 +42,7 @@ const App = () => {
     changeUserStatus(loggedUser._id);
     selectUser(1);
     setUserLogged(false);
+    setLoggedUser({});
   };
 
   const registerUser = async () => {
@@ -97,31 +99,33 @@ const App = () => {
       body: JSON.stringify({ id: id }),
     }).then(updateUser);
   };
-  const updateUser = () => {
-    fetch(`/user_info`, {
+  const updateUser = async () => {
+    const response = await fetch(`/user_info`, {
       method: "POST",
       headers: {
         content_type: "application/json",
       },
       body: JSON.stringify({ id: loggedUser._id }),
-    })
-      .then((res) => res.json())
-      .then((data) => setLoggedUser(data));
+    });
+    const data = await response.json();
+    await setLoggedUser(data);
+    return data.status;
   };
   const selectUser = (id: number) => {
     setSelectedUser(id);
   };
 
-  const setupBeforeUnloadListener = () => {
-    window.addEventListener("beforeunload", (ev) => {
-      ev.preventDefault();
-      return logOut();
-    });
-  };
+  useBeforeunload(() => {
+    if (userLogged) {
+      const status = updateUser();
+      console.log(loggedUser);
+      if (status) {
+        changeUserStatus(loggedUser._id);
+        return "You'll lose your data!";
+      }
+    } else return;
+  });
 
-  useEffect(() => {
-    setupBeforeUnloadListener();
-  }, [userLogged]);
   return (
     <MainBody>
       {userLogged ? (

@@ -1,33 +1,48 @@
 import React from "react";
 import Friend from "./Friend";
-import { ContactsList, GroupChoose, SearchBar, Constacts } from "../Styles";
+import { ContactsList, ModeSelect, SearchBar, Constacts } from "../Styles";
+import { useState, useEffect } from "react";
 export interface UserO {
   user_friends: number[];
   user_privilege_level: number;
   selectUser: (id: number) => any;
   delete_user: (id: number) => any;
 }
+interface FriendI {
+  id: number;
+  name: string;
+  image_link: string;
+}
 
-const Friends = ({
-  user_friends,
-  user_privilege_level,
-  selectUser,
-  delete_user,
-}: UserO) => {
+const Friends = ({ user_friends, selectUser }: UserO) => {
+  const [user_friends_data_list, setUser_friends_data_list] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`/friends_info`, {
+        method: "POST",
+        headers: {
+          content_type: "application/json",
+        },
+        body: JSON.stringify({ ids: user_friends }),
+      });
+      const data = await response.json();
+      await setUser_friends_data_list(data.list);
+    };
+    fetchData();
+  }, [user_friends]);
   return (
     <ContactsList>
-      <GroupChoose></GroupChoose>
+      <ModeSelect></ModeSelect>
       <SearchBar></SearchBar>
-      <button onClick={() => console.log(user_friends)}>Friends</button>
       <Constacts big={user_friends.length > 10 ? 1 : 0}>
-        {user_friends.map((friend: number) => {
+        {user_friends_data_list.map((friend: FriendI) => {
           return (
             <Friend
-              friend_id={friend}
+              id={friend.id}
+              name={friend.name}
+              image={friend.image_link}
               selectUser={selectUser}
-              delete_user={delete_user}
-              key={friend}
-              priv_lvl={user_privilege_level}
+              key={friend.id}
             />
           );
         })}

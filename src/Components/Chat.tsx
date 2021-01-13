@@ -18,18 +18,22 @@ interface MessageI {
 }
 const Chat = ({ logOut, selectedUser, loggedUserId }: ChatI) => {
   const [sUserInfo, setSUserInfo] = useState({});
+  // eslint-disable-next-line
   const [messages, setMessages] = useState([]);
   useEffect(() => {
-    fetch(`/user_info`, {
-      method: "POST",
-      headers: {
-        content_type: "application/json",
-      },
-      body: JSON.stringify({ id: selectedUser }),
-    })
-      .then((res) => res.json())
-      .then((data) => setSUserInfo(data));
-    console.log(`select user time: ${Date.now()}`);
+    const fetchData = async () => {
+      const userResponse = await fetch(`/user_info`, {
+        method: "POST",
+        headers: {
+          content_type: "application/json",
+        },
+        body: JSON.stringify({ id: selectedUser }),
+      });
+      const userData = await userResponse.json();
+      await setSUserInfo(userData);
+      console.log(`select user time: ${Date.now()}`);
+    };
+    fetchData();
   }, [selectedUser]);
 
   return (
@@ -37,7 +41,7 @@ const Chat = ({ logOut, selectedUser, loggedUserId }: ChatI) => {
       <ChoosenPerson
         logOut={logOut}
         user_image={sUserInfo.user_image_link}
-        user_name={sUserInfo.name}
+        user_name={sUserInfo.user_name}
       />
 
       <ActualChat>

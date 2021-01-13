@@ -1,4 +1,4 @@
-import { ChoosenPerson as PersonDiv } from "../Styles";
+import { ChoosenPerson as PersonDiv, FriendImage } from "../Styles";
 
 
 interface choosenI{
@@ -10,7 +10,7 @@ const ChoosenPerson = ({logOut,user_name,user_image}: choosenI) => {
   return <PersonDiv>
       <button onClick={logOut}>logOut</button>
       <div>{user_name}</div>
-      <div>{user_image}</div>
+      <FriendImage src={user_image}  alt="friend image"/>
   </PersonDiv>;
 };
 

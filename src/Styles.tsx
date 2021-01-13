@@ -65,7 +65,7 @@ export const ContactsList = styled.div`
   height: 100%;
   background-color: lime;
 `;
-export const GroupChoose = styled.div`
+export const ModeSelect = styled.select`
   display: flex;
   align-items: center;
   justify-content: center;
