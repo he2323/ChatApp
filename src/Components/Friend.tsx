@@ -7,11 +7,12 @@ export interface FrienI {
   name: string;
   image: string;
   status: boolean;
+  type: "friend" | "chat";
   selectUser: ({ id, type }: SelElementI) => any;
 }
-export const Friend = ({ id, name, image, status, selectUser }: FrienI) => {
+export const Friend = ({ id, name, image, status, type, selectUser }: FrienI) => {
   return (
-    <Person onClick={() => selectUser({ id: id, type: "friend" })}>
+    <Person onClick={() => selectUser({ id: id, type: type })}>
       <FriendImage src={image} alt="friend image" />
       <div>{name}</div>
       <IconContext.Provider value={{ color: "darkgreen" }}>

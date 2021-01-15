@@ -20,7 +20,7 @@ const App = () => {
   const [selectedMode, setSelectedMode] = useState("startingPage");
   // eslint-disable-next-line
   const [privilege_level, setPrivilege_level] = useState(1); // (0- guest, 1- user, 3-admin) base 1, couse its for normal registration, still no guest login, and admin is speciall hcanging only in database
-  const [selectedElement, setSelectedElement] = useState(1); //store selected user id
+  const [selectedElement, setSelectedElement] = useState({id: 0, type: "start"}); //store selected user id
   //basic navigation
   
   const toRegister = (): void => setUserHaveAccount(false);

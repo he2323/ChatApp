@@ -3,6 +3,8 @@ import { useState } from "react";
 import { ChatMain, ActualChat, Message, MsgHandle } from "../Styles";
 import ChoosenPerson from "./ChoosenPerson";
 import { SelElementI } from "./Logged";
+import ChoosenChat from "./ChoosenChat";
+import StartGreet from "./StartGreet";
 interface ChatI {
   logOut: () => any;
   selectedUser: SelElementI;
@@ -19,10 +21,9 @@ interface MessageI {
 }
 const Chat = ({ logOut, selectedUser, loggedUserId }: ChatI) => {
   const [sUserInfo, setSUserInfo] = useState({});
-  // eslint-disable-next-line
   const [messages, setMessages] = useState([]);
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       const userResponse = await fetch(`/user_info`, {
         method: "POST",
         headers: {
@@ -33,16 +34,22 @@ const Chat = ({ logOut, selectedUser, loggedUserId }: ChatI) => {
       const userData = await userResponse.json();
       await setSUserInfo(userData);
     };
-    fetchData();
+    if (selectedUser.id !== 0 && selectedUser.type === "friend") fetchUserData();
   }, [selectedUser]);
 
   return (
     <ChatMain>
-      <ChoosenPerson
-        logOut={logOut}
-        user_image={sUserInfo.user_image_link}
-        user_name={sUserInfo.user_name}
-      />
+      {selectedUser.type === "friend" ? (
+        <ChoosenPerson
+          logOut={logOut}
+          user_image={sUserInfo.user_image_link}
+          user_name={sUserInfo.user_name}
+        />
+      ) : selectedUser.type === "chat" ? (
+        <ChoosenChat />
+      ) : (
+        <StartGreet />
+      )}
 
       <ActualChat>
         {messages.map((message: MessageI) => {

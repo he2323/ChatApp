@@ -4,16 +4,16 @@ import { ContactsList, ModeSelect, SearchBar, Constacts } from "../Styles";
 import { useState, useEffect } from "react";
 import FriendsList from "./FriendsList";
 import ChatList from "./ChatList";
-export interface SelElementI{
+export interface SelElementI {
   id: number;
-  type: string;
+  type: "friend" | "chat" | "start";
 }
 export interface UserO {
   user_friends: number[];
   user_chats: number[];
   loggedUserId: number;
   selectedMode: string;
-  selectElement: ({id, type}:SelElementI) => any;
+  selectElement: ({ id, type }: SelElementI) => any;
   selectMode: (mode: string) => any;
 }
 export interface ElementI {
@@ -71,7 +71,11 @@ const Logged = ({
     <ContactsList>
       <ModeSelect
         defaultValue={selectedMode}
-        onChange={(event: any) => selectMode(event.currentTarget.value)}
+        onChange={(event: any) => {
+          selectMode(event.currentTarget.value);
+          if (event.currentTarget.value === "startingPage")
+            selectElement({ id: 0, type: "start" });
+        }}
       >
         {options.map((option: any) => (
           <option key={option.value} value={option.value}>

@@ -17,6 +17,7 @@ const ChatList = ({ chats_data, loggedUserId, selectChat }: ChatsListI) => {
           image={chat.image_link}
           status={chat.status}
           selectUser={selectChat}
+          type = {"chat"}
         />
       ))}
     </>

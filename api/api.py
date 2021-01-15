@@ -22,11 +22,21 @@ def increase_counter(counter_name):
     return new_counter_value
 
 
-def after_register():
+@app.before_request
+def before_request():
     every_user_id = []
     for i in UsersCollection.find():
         every_user_id.append(i["_id"])
     UsersCollection.update_one({"user_name": "admin"}, {"$set": {"user_friends_ids": every_user_id}})
+    for chat in ChatCollection.find():
+        found_user = False
+        for user in UsersCollection.find():
+            if user["_id"] in chat["members_ids"] and user["status"]:
+                found_user = True
+        if found_user:
+            ChatCollection.update_one({"_id": chat['_id']}, {"$set": {"status": True}})
+        else:
+            ChatCollection.update_one({"_id": chat['_id']}, {"$set": {"status": False}})
 
 
 @app.route("/register", methods=['POST'])
@@ -44,7 +54,6 @@ def register():
                     "user_create_date": date.today().strftime("%d/%m/%Y"),
                     "status": False}
         UsersCollection.insert_one(new_user)
-        after_register()
         return {"res": True}
     else:
         return {"res": False}
