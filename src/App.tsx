@@ -4,7 +4,7 @@ import { useBeforeunload } from "react-beforeunload";
 import Chat from "./Components/Chat";
 import Login from "./Components/Login";
 import Register from "./Components/Register";
-import Friends from "./Components/Friends";
+import Logged from "./Components/Logged";
 import { MainBody, MainApp } from "./Styles";
 
 const App = () => {
@@ -17,18 +17,13 @@ const App = () => {
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [image_link, setImage_link] = useState("");
+  const [selectedMode, setSelectedMode] = useState("startingPage");
   // eslint-disable-next-line
   const [privilege_level, setPrivilege_level] = useState(1); // (0- guest, 1- user, 3-admin) base 1, couse its for normal registration, still no guest login, and admin is speciall hcanging only in database
-  const [selectedUser, setSelectedUser] = useState(1); //store selected user id
+  const [selectedElement, setSelectedElement] = useState(1); //store selected user id
   //basic navigation
-  const toLogin = (): void => setUserHaveAccount(true);
+  
   const toRegister = (): void => setUserHaveAccount(false);
-  //user info
-  const changeMail = (value: string): void => setMail(value);
-  const changePassword = (value: string): void => setPassword(value);
-  const changeName = (value: string): void => setName(value);
-  const changeNickname = (value: string): void => setNickname(value);
-  const changeImage_link = (value: string): void => setImage_link(value);
 
   const changeUserStatus = (id: number) =>
     fetch(`/status_change`, {
@@ -40,7 +35,7 @@ const App = () => {
     });
   const logOut = () => {
     changeUserStatus(loggedUser._id);
-    selectUser(1);
+    setSelectedElement(1);
     setUserLogged(false);
     setLoggedUser({});
   };
@@ -64,7 +59,7 @@ const App = () => {
     const data = await response.json();
     if (data.res) {
       console.log("udało się utworzyć użytkownia");
-      toLogin();
+      setUserHaveAccount(true);
     } else {
       console.log("nie udało się utworzyć użytkownia");
     }
@@ -111,9 +106,6 @@ const App = () => {
     await setLoggedUser(data);
     return data.status;
   };
-  const selectUser = (id: number) => {
-    setSelectedUser(id);
-  };
 
   useBeforeunload(() => {
     if (userLogged) {
@@ -125,29 +117,30 @@ const App = () => {
       }
     } else return;
   });
-
   return (
     <MainBody>
       {userLogged ? (
         <MainApp>
-          <Friends
+          <Logged
+            loggedUserId={loggedUser._id}
             user_friends={loggedUser.user_friends_ids}
-            user_privilege_level={loggedUser.user_privilege_level}
-            delete_user={deleteUser}
-            selectUser={selectUser}
-          ></Friends>
+            user_chats = {loggedUser.user_chats_ids}
+            selectedMode={selectedMode}
+            selectElement={setSelectedElement}
+            selectMode={setSelectedMode}
+          ></Logged>
           <Chat
             logOut={logOut}
-            selectedUser={selectedUser}
+            selectedUser={selectedElement}
             loggedUserId={loggedUser._id}
-          ></Chat>
+          />
         </MainApp>
       ) : userHaveAccount ? (
         <Login
           mail={mail}
           password={password}
-          changeMail={changeMail}
-          changePassword={changePassword}
+          changeMail={setMail}
+          changePassword={setPassword}
           toRegister={toRegister}
           logIn={logIn}
         ></Login>
@@ -159,14 +152,15 @@ const App = () => {
           nickname={nickname}
           image_link={image_link}
           register={registerUser}
-          toLogin={toLogin}
-          changeMail={changeMail}
-          changePassword={changePassword}
-          changeName={changeName}
-          changeNickname={changeNickname}
-          changeImage_link={changeImage_link}
+          toLogin={setUserHaveAccount}
+          changeMail={setMail}
+          changePassword={setPassword}
+          changeName={setName}
+          changeNickname={setNickname}
+          changeImage_link={setImage_link}
         ></Register>
       )}
+      <button onClick={() => console.log(selectedMode)}>log</button>
     </MainBody>
   );
 };

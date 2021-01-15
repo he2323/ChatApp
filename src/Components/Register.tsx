@@ -8,7 +8,7 @@ interface RegisterI {
   name: string;
   nickname: string;
   image_link: string;
-  toLogin: () => void;
+  toLogin: (status: boolean) => void;
   changeMail: (value: string) => void;
   changePassword: (value: string) => void;
   changeName: (value: string) => void;
@@ -76,7 +76,7 @@ const Register = ({
         </LoginButton>
         <div>
           Have account?
-          <div onClick={() => toLogin()}>try to log in</div>
+          <div onClick={() => toLogin(true)}>try to log in</div>
         </div>
       </Forms>
     </MainLogin>

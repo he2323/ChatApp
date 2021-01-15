@@ -8,12 +8,12 @@ app = Flask(__name__)
 DbClient = MongoClient("mongodb://localhost:27017/")
 Database = DbClient["chatApp"]
 UsersCollection = Database["users"]
-GroupsCollection = Database["groups"]
+ChatCollection = Database["chats"]
 CountersCollection = Database["counters"]
 MessagesCollection = Database["messages"]
 
 
-def increaseCounter(counter_name):
+def increase_counter(counter_name):
     counter_query = {"counter_name": counter_name}
     actual_counter_value = CountersCollection.find_one(counter_query)
     new_counter_value = actual_counter_value["counter_value"] + 1
@@ -22,8 +22,7 @@ def increaseCounter(counter_name):
     return new_counter_value
 
 
-@app.before_request
-def before_request():
+def after_register():
     every_user_id = []
     for i in UsersCollection.find():
         every_user_id.append(i["_id"])
@@ -37,14 +36,15 @@ def register():
     if ("@" in data["mail"] or data["mail"] == "admin") and len(data["mail"]) >= 5 and (
             len(data["password"]) >= 8 or data["password"] == "admin") and len(
         data["name"]) > 0 and int(data["privilege_level"]) > 0:
-        new_user = {"_id": increaseCounter("users"), "user_email": data["mail"], "user_password": data["password"],
+        new_user = {"_id": increase_counter("users"), "user_email": data["mail"], "user_password": data["password"],
                     "user_name": data["name"],
                     "user_nickname": data['nickname'],
-                    "user_image_link": data['image_link'], "user_friends_ids": [], "user_groups_ids": [],
+                    "user_image_link": data['image_link'], "user_friends_ids": [1], "user_chats_ids": [],
                     "user_privilege_level": data['privilege_level'],
                     "user_create_date": date.today().strftime("%d/%m/%Y"),
                     "status": False}
         UsersCollection.insert_one(new_user)
+        after_register()
         return {"res": True}
     else:
         return {"res": False}
@@ -83,8 +83,11 @@ def friends_info():
     res = []
     for id in data['ids']:
         user = UsersCollection.find_one({"_id": id})
-        res.append({"id": user['_id'], "image_link": user["user_image_link"], "name": user["user_name"]})
-    return {'list': res}
+        if user:
+            res.append({"id": user['_id'], "image_link": user["user_image_link"], "name": user["user_name"],
+                        "status": user['status']})
+
+    return {'list': sorted(res, key=lambda friend: friend['status'], reverse=True)}
 
 
 @app.route("/status_change", methods=['POST'])
@@ -100,6 +103,18 @@ def status_change():
     return "nie git"
 
 
+@app.route("/chats", methods=["POST"])
+def chats():
+    data = request.json
+    user_id = data['id']
+    res = []
+    for chat in ChatCollection.find():
+        if user_id in chat['members_ids']:
+            res.append({'name': chat['name'], 'img_link': chat['img_link'], "status": chat['status']})
+    # "id": chat['_id'],
+    return {'list': sorted(res, key=lambda elem: elem['status'], reverse=True)}
+
+
 @app.route("/messages", methods=['POST'])
 def messages():
     data = request.json
@@ -107,17 +122,12 @@ def messages():
     message = MessagesCollection.find(query)
 
 
-# def get_users():
-#     app.logger.warning(list(UsersCollection.find()))
-#
-#
-# get_users()
 app.run(debug=True)
 """
 users:s
-  user_id, user_email, user_password, user_name, user_nickname, user_image_link, user_friends: [friends_id], user_groups_id: [group_id], user_privilege_level
-groups:
-  group_id, group_name, group_members_id: [user_id]
+  user_id, user_email, user_password, user_name, user_nickname, user_image_link, user_friends: [friends_id], user_chat_id: [chat_id], user_privilege_level
+chats:
+  chat_id, chat_name, chat_members_id: [user_id], chat_img_link, chat_create_date, chat_status(if any member of chat is active, then true, else false)
 messages:
   message_id, message_sender_id, message_group_id, message_text, message_type, message_img_link, message_send_date, message_send_time
 counters:

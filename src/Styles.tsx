@@ -71,9 +71,9 @@ export const ModeSelect = styled.select`
   justify-content: center;
   color: white;
   font-size: 10px;
-  width calc(15vw*0.9);
+  width calc(15vw*1.3);
   height: 5%;
-  background-color: white;
+  background-color: black;
 
 `;
 export const SearchBar = styled.div`
@@ -93,11 +93,13 @@ export const Person = styled.div`
   min-height: 10%;
   background-color: aqua;
   margin: 1px;
+  padding-right: 20px;
 `;
 export const Constacts = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width calc(19vw*0.9);
   height: 90%;
   margin-top: 5px;
@@ -174,5 +176,6 @@ export const LoginButton = styled.button`
 export const FriendImage = styled.img`
 border-radius: 75px;
 margin-left: 5%;
-height:75%;
+height:60%;
+max-width: 40%;
 `

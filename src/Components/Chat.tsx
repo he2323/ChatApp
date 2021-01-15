@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { ChatMain, ActualChat, Message, MsgHandle } from "../Styles";
 import ChoosenPerson from "./ChoosenPerson";
+import { SelElementI } from "./Logged";
 interface ChatI {
   logOut: () => any;
-  selectedUser: number;
+  selectedUser: SelElementI;
   loggedUserId: number;
 }
 interface MessageI {
@@ -27,11 +28,10 @@ const Chat = ({ logOut, selectedUser, loggedUserId }: ChatI) => {
         headers: {
           content_type: "application/json",
         },
-        body: JSON.stringify({ id: selectedUser }),
+        body: JSON.stringify({ id: selectedUser.id }),
       });
       const userData = await userResponse.json();
       await setSUserInfo(userData);
-      console.log(`select user time: ${Date.now()}`);
     };
     fetchData();
   }, [selectedUser]);
