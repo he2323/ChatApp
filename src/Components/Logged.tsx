@@ -1,16 +1,15 @@
 import React from "react";
-import { Friend } from "./Friend";
+import { Friend } from "../Containers/Friend";
 import { ContactsList, ModeSelect, SearchBar, Constacts } from "../Styles";
 import { useState, useEffect } from "react";
-import FriendsList from "./FriendsList";
-import ChatList from "./ChatList";
+import FriendsList from "../Containers/FriendsList";
+import ChatList from "../Containers/ChatList";
 export interface SelElementI {
   id: number;
   type: "friend" | "chat" | "start";
 }
 export interface UserO {
   user_friends: number[];
-  user_chats: number[];
   loggedUserId: number;
   selectedMode: string;
   selectElement: ({ id, type }: SelElementI) => any;
@@ -25,7 +24,6 @@ export interface ElementI {
 
 const Logged = ({
   user_friends,
-  user_chats,
   loggedUserId,
   selectedMode,
   selectMode,

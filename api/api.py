@@ -49,7 +49,7 @@ def register():
         new_user = {"_id": increase_counter("users"), "user_email": data["mail"], "user_password": data["password"],
                     "user_name": data["name"],
                     "user_nickname": data['nickname'],
-                    "user_image_link": data['image_link'], "user_friends_ids": [1], "user_chats_ids": [],
+                    "user_image_link": data['image_link'], "user_friends_ids": [1],
                     "user_privilege_level": data['privilege_level'],
                     "user_create_date": date.today().strftime("%d/%m/%Y"),
                     "status": False}
@@ -119,7 +119,7 @@ def chats():
     res = []
     for chat in ChatCollection.find():
         if user_id in chat['members_ids']:
-            res.append({'name': chat['name'], 'img_link': chat['img_link'], "status": chat['status']})
+            res.append({'id': 1, 'name': chat['name'], 'img_link': chat['img_link'], "status": chat['status']})
     # "id": chat['_id'],
     return {'list': sorted(res, key=lambda elem: elem['status'], reverse=True)}
 

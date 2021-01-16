@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { ChatMain, ActualChat, Message, MsgHandle } from "../Styles";
-import ChoosenPerson from "./ChoosenPerson";
+import ChoosenPerson from "../Containers/ChoosenPerson";
 import { SelElementI } from "./Logged";
-import ChoosenChat from "./ChoosenChat";
-import StartGreet from "./StartGreet";
+import ChoosenChat from "../Containers/ChoosenChat";
+import StartGreet from "../Containers/StartGreet";
 interface ChatI {
   logOut: () => any;
   selectedUser: SelElementI;

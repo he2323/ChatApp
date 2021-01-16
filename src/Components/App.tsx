@@ -1,11 +1,11 @@
 // eslint-disable-next-line
 import { useState, useEffect } from "react";
 import { useBeforeunload } from "react-beforeunload";
-import Chat from "./Components/Chat";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
-import Logged from "./Components/Logged";
-import { MainBody, MainApp } from "./Styles";
+import Chat from "./Chat";
+import Login from "../Containers/Login";
+import Register from "../Containers/Register";
+import Logged from "./Logged";
+import { MainBody, MainApp } from "../Styles";
 
 const App = () => {
   //data to store
@@ -117,6 +117,9 @@ const App = () => {
       }
     } else return;
   });
+  useEffect(() => {
+    console.log(loggedUser);
+  }, [loggedUser])
   return (
     <MainBody>
       {userLogged ? (
@@ -124,7 +127,6 @@ const App = () => {
           <Logged
             loggedUserId={loggedUser._id}
             user_friends={loggedUser.user_friends_ids}
-            user_chats = {loggedUser.user_chats_ids}
             selectedMode={selectedMode}
             selectElement={setSelectedElement}
             selectMode={setSelectedMode}

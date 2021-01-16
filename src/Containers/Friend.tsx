@@ -1,7 +1,7 @@
 import { Person, FriendImage } from "../Styles";
 import { GoPrimitiveDot } from "react-icons/go";
 import { IconContext } from "react-icons";
-import { SelElementI } from "./Logged";
+import { SelElementI } from "../Components/Logged";
 export interface FrienI {
   id: number;
   name: string;
@@ -12,7 +12,7 @@ export interface FrienI {
 }
 export const Friend = ({ id, name, image, status, type, selectUser }: FrienI) => {
   return (
-    <Person onClick={() => selectUser({ id: id, type: type })}>
+    <Person onLoad={()=>console.log(`${type} of name: ${name} has id of: ${id}`)} onClick={() => selectUser({ id: id, type: type })}>
       <FriendImage src={image} alt="friend image" />
       <div>{name}</div>
       <IconContext.Provider value={{ color: "darkgreen" }}>
