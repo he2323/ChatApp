@@ -85,6 +85,7 @@ const App = () => {
       }
     } else alert("to short");
   };
+  // eslint-disable-next-line
   const deleteUser = (id: number) => {
     fetch(`/deleteUser`, {
       method: "POST",
@@ -126,14 +127,14 @@ const App = () => {
         <MainApp>
           <Logged
             loggedUserId={loggedUser._id}
-            user_friends={loggedUser.user_friends_ids}
+            user_friends={loggedUser.friends_ids}
             selectedMode={selectedMode}
             selectElement={setSelectedElement}
             selectMode={setSelectedMode}
-          ></Logged>
+          />
           <Chat
             logOut={logOut}
-            selectedUser={selectedElement}
+            selectedElement={selectedElement}
             loggedUserId={loggedUser._id}
           />
         </MainApp>

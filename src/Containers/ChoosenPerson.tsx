@@ -1,17 +1,18 @@
 import { ChoosenPerson as PersonDiv, FriendImage } from "../Styles";
 
-
-interface choosenI{
-    user_name: string;
-    user_image: string;
-    logOut: ()=>any;
+export interface ChoosenI {
+  name: string;
+  image: string;
+  logOut: () => any;
 }
-const ChoosenPerson = ({logOut,user_name,user_image}: choosenI) => {
-  return <PersonDiv>
+const ChoosenPerson = ({ logOut, name, image }: ChoosenI) => {
+  return (
+    <PersonDiv>
       <button onClick={logOut}>logOut</button>
-      <div>{user_name}</div>
-      <FriendImage src={user_image}  alt="friend image"/>
-  </PersonDiv>;
+      <div>{name}</div>
+      <FriendImage src={image} alt="friend image" />
+    </PersonDiv>
+  );
 };
 
 export default ChoosenPerson;

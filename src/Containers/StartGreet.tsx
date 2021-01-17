@@ -1,9 +1,9 @@
 import { ChoosenPerson as Greet } from "../Styles";
 
 
-const StartGreet = () => {
+const StartGreet = ({isPlaceholder}: {isPlaceholder?: boolean}) => {
     return (
-        <Greet>Hello on the chat App! Feel free to test it out</Greet>
+        <Greet placeHolder={isPlaceholder}>Hello on the chat App! Feel free to test it out</Greet>
     )
 }
 

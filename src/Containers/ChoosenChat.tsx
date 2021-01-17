@@ -1,12 +1,14 @@
-import { ChoosenPerson as ChatInfo } from "../Styles";
+import { ChoosenPerson as ChatInfo, FriendImage } from "../Styles";
+import { ChoosenI } from "./ChoosenPerson";
 
+const ChoosenChat = ({ logOut, name, image }: ChoosenI) => {
+  return (
+    <ChatInfo>
+      <button onClick={logOut}>logOut</button>
+      <div>i'm a chat! {name}</div>
+      <FriendImage src={image} alt="friend image" />
+    </ChatInfo>
+  );
+};
 
-const ChoosenChat = () => {
-    return (
-        <ChatInfo>
-            
-        </ChatInfo>
-    )
-}
-
-export default ChoosenChat
+export default ChoosenChat;

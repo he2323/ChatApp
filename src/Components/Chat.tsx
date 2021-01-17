@@ -5,73 +5,60 @@ import ChoosenPerson from "../Containers/ChoosenPerson";
 import { SelElementI } from "./Logged";
 import ChoosenChat from "../Containers/ChoosenChat";
 import StartGreet from "../Containers/StartGreet";
+import FriendMng from "./FriendMng"
 interface ChatI {
   logOut: () => any;
-  selectedUser: SelElementI;
+  selectedElement: SelElementI;
   loggedUserId: number;
 }
-interface MessageI {
-  message_id: number;
-  message_sender_id: number;
-  message_group_id: number;
-  message_text: string;
-  message_type: string;
-  message_img_link?: string;
-  message_send_date: Date;
-}
-const Chat = ({ logOut, selectedUser, loggedUserId }: ChatI) => {
-  const [sUserInfo, setSUserInfo] = useState({});
+const Chat = ({ logOut, selectedElement, loggedUserId }: ChatI) => {
+  const [sElementInfo, setsElementInfo] = useState({});
   const [messages, setMessages] = useState([]);
   useEffect(() => {
-    const fetchUserData = async () => {
-      const userResponse = await fetch(`/user_info`, {
-        method: "POST",
-        headers: {
-          content_type: "application/json",
-        },
-        body: JSON.stringify({ id: selectedUser.id }),
-      });
-      const userData = await userResponse.json();
-      await setSUserInfo(userData);
+    const fetchElementData = async () => {
+      const elementResponse = await fetch(
+        selectedElement.type === "friend" ? "/user_info" : "/chat_info",
+        {
+          method: "POST",
+          headers: {
+            content_type: "application/json",
+          },
+          body: JSON.stringify({ id: selectedElement.id }),
+        }
+      );
+      const elementData = await elementResponse.json();
+      await setsElementInfo(elementData);
     };
-    if (selectedUser.id !== 0 && selectedUser.type === "friend") fetchUserData();
-  }, [selectedUser]);
+    if (selectedElement.type !== "start") {
+      fetchElementData();
+    }
+    console.log(sElementInfo);
+  }, [selectedElement]);
 
   return (
     <ChatMain>
-      {selectedUser.type === "friend" ? (
+      {selectedElement.type === "friend" ? (
         <ChoosenPerson
           logOut={logOut}
-          user_image={sUserInfo.user_image_link}
-          user_name={sUserInfo.user_name}
+          image={sElementInfo.image_link}
+          name={sElementInfo.name}
         />
-      ) : selectedUser.type === "chat" ? (
-        <ChoosenChat />
+      ) : selectedElement.type === "chat" ? (
+        <ChoosenChat
+          logOut={logOut}
+          image={sElementInfo.image_link}
+          name={sElementInfo.name}
+        />
       ) : (
         <StartGreet />
       )}
 
-      <ActualChat>
-        {messages.map((message: MessageI) => {
-          return (
-            <Message
-              loggedUser={message.message_sender_id === loggedUserId ? 1 : 0}
-            >
-              {message.message_text}
-            </Message>
-          );
-        })}
-        <Message loggedUser={0}>somerandom text shit</Message>
+      {selectedElement.type==="chat" ? <ActualChat>
         <Message loggedUser={1}>somerandom text shit</Message>
-        <Message loggedUser={0}>somerandom text shit</Message>
-        <Message loggedUser={1}>somerandom text shit</Message>
-        <Message loggedUser={1}>somerandom text shit</Message>
-        <Message loggedUser={0}>somerandom text shit</Message>
-        <Message loggedUser={1}>somerandom text shit</Message>
-        <button onClick={() => console.log(selectedUser)}>
+        <button onClick={() => console.log(selectedElement)}>
           selected user log
         </button>
-      </ActualChat>
+      </ActualChat> : selectedElement.type === "friend" ? <FriendMng /> : <StartGreet isPlaceholder={true}/>}
       <MsgHandle></MsgHandle>
     </ChatMain>
   );

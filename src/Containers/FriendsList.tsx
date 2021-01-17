@@ -15,7 +15,7 @@ const FriendsList = ({friends_data, loggedUserId, selectUser}:FriendsListI) => {
           <Friend
             id={friend.id}
             name={friend.name}
-            image={friend.image_link}
+            image={friend.img_link}
             status={friend.status}
             selectUser={selectUser}
             key={friend.id}

@@ -1,5 +1,4 @@
 import React from "react";
-import { Friend } from "../Containers/Friend";
 import { ContactsList, ModeSelect, SearchBar, Constacts } from "../Styles";
 import { useState, useEffect } from "react";
 import FriendsList from "../Containers/FriendsList";
@@ -18,7 +17,7 @@ export interface UserO {
 export interface ElementI {
   id: number;
   name: string;
-  image_link: string;
+  img_link: string;
   status: boolean;
 }
 

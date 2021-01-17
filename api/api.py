@@ -27,7 +27,7 @@ def before_request():
     every_user_id = []
     for i in UsersCollection.find():
         every_user_id.append(i["_id"])
-    UsersCollection.update_one({"user_name": "admin"}, {"$set": {"user_friends_ids": every_user_id}})
+    UsersCollection.update_one({"name": "admin"}, {"$set": {"friends_ids": every_user_id}})
     for chat in ChatCollection.find():
         found_user = False
         for user in UsersCollection.find():
@@ -46,12 +46,12 @@ def register():
     if ("@" in data["mail"] or data["mail"] == "admin") and len(data["mail"]) >= 5 and (
             len(data["password"]) >= 8 or data["password"] == "admin") and len(
         data["name"]) > 0 and int(data["privilege_level"]) > 0:
-        new_user = {"_id": increase_counter("users"), "user_email": data["mail"], "user_password": data["password"],
-                    "user_name": data["name"],
-                    "user_nickname": data['nickname'],
-                    "user_image_link": data['image_link'], "user_friends_ids": [1],
-                    "user_privilege_level": data['privilege_level'],
-                    "user_create_date": date.today().strftime("%d/%m/%Y"),
+        new_user = {"_id": increase_counter("users"), "email": data["mail"], "password": data["password"],
+                    "name": data["name"],
+                    "nickname": data['nickname'],
+                    "image_link": data['image_link'], "friends_ids": [1],
+                    "privilege_level": data['privilege_level'],
+                    "create_date": date.today().strftime("%d/%m/%Y"),
                     "status": False}
         UsersCollection.insert_one(new_user)
         return {"res": True}
@@ -62,7 +62,7 @@ def register():
 @app.route("/login", methods=['POST'])
 def login():
     data = request.json
-    query = {'user_email': data['mail'], "user_password": data['password']}
+    query = {'email': data['mail'], "password": data['password']}
 
     user = UsersCollection.find_one(query)
 
@@ -86,6 +86,12 @@ def user_info():
     return UsersCollection.find_one({"_id": data['id']})
 
 
+@app.route("/chat_info", methods=['POST'])
+def chat_info():
+    data = request.json
+    return ChatCollection.find_one({'_id': data['id']})
+
+
 @app.route("/friends_info", methods=['POST'])
 def friends_info():
     data = request.json
@@ -93,7 +99,7 @@ def friends_info():
     for id in data['ids']:
         user = UsersCollection.find_one({"_id": id})
         if user:
-            res.append({"id": user['_id'], "image_link": user["user_image_link"], "name": user["user_name"],
+            res.append({"id": user['_id'], "img_link": user["image_link"], "name": user["name"],
                         "status": user['status']})
 
     return {'list': sorted(res, key=lambda friend: friend['status'], reverse=True)}

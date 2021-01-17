@@ -25,12 +25,24 @@ export const ChatMain = styled.div`
 `;
 export const ChoosenPerson = styled.div`
   width: 100%;
-  height: 10%;
+
+  height: ${(props: any) => (props.placeHolder ? "80%" : "10%")};
   background-color: grey;
   box-shadow: 0px 2px cadetblue;
   margin-bottom: 2px;
-  display:flex;
+  display: flex;
   flex-direction: row;
+`;
+export const FriendOptions = styled.div`
+  width: 100%;
+  min-height: 80%;
+  max-height: 80%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  overflow-y: hidden;
 `;
 export const ActualChat = styled.div`
   width: 100%;
@@ -174,8 +186,8 @@ export const LoginButton = styled.button`
 `;
 
 export const FriendImage = styled.img`
-border-radius: 75px;
-margin-left: 5%;
-height:60%;
-max-width: 40%;
-`
+  border-radius: 75px;
+  margin-left: 5%;
+  height: 60%;
+  max-width: 40%;
+`;
