@@ -5,7 +5,7 @@ import ChoosenPerson from "../Containers/ChoosenPerson";
 import { SelElementI } from "./Logged";
 import ChoosenChat from "../Containers/ChoosenChat";
 import StartGreet from "../Containers/StartGreet";
-import FriendMng from "./FriendMng"
+import FriendMng from "./FriendMng";
 interface ChatI {
   logOut: () => any;
   selectedElement: SelElementI;
@@ -32,7 +32,6 @@ const Chat = ({ logOut, selectedElement, loggedUserId }: ChatI) => {
     if (selectedElement.type !== "start") {
       fetchElementData();
     }
-    console.log(sElementInfo);
   }, [selectedElement]);
 
   return (
@@ -53,12 +52,19 @@ const Chat = ({ logOut, selectedElement, loggedUserId }: ChatI) => {
         <StartGreet />
       )}
 
-      {selectedElement.type==="chat" ? <ActualChat>
-        <Message loggedUser={1}>somerandom text shit</Message>
-        <button onClick={() => console.log(selectedElement)}>
-          selected user log
-        </button>
-      </ActualChat> : selectedElement.type === "friend" ? <FriendMng /> : <StartGreet isPlaceholder={true}/>}
+      {selectedElement.type === "chat" ? (
+        <ActualChat>
+          <Message loggedUser={1}>somerandom text shit</Message>
+          <button onClick={() => console.log(selectedElement)}>
+            selected user log
+          </button>
+        </ActualChat>
+      ) : selectedElement.type === "friend" ? (
+        <FriendMng selectedElement={selectedElement}
+        loggedUser={loggedUserId}/>
+      ) : (
+        <StartGreet isPlaceholder={true} />
+      )}
       <MsgHandle></MsgHandle>
     </ChatMain>
   );

@@ -118,9 +118,7 @@ const App = () => {
       }
     } else return;
   });
-  useEffect(() => {
-    console.log(loggedUser);
-  }, [loggedUser])
+
   return (
     <MainBody>
       {userLogged ? (

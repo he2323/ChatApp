@@ -35,6 +35,8 @@ const Logged = ({
     { label: "Friends", value: "friends" },
     { label: "Chats", value: "chats" },
   ]);
+  const [searchText, setSearchText] = useState("");
+  const [similarUsers, setSimilarUsers] = useState([]);
   useEffect(() => {
     const fetchUserFriendsData = async () => {
       const response = await fetch(`/friends_info`, {
@@ -63,7 +65,19 @@ const Logged = ({
     if (user_friends.length > 0) fetchUserFriendsData();
     fetchUserChatsData();
   }, [user_friends]);
-
+  const show_dropdown = () => {};
+  const get_users = async () => {
+    const response = await fetch("/search_user", {
+      method: "POST",
+      headers: {
+        content_type: "application/json",
+      },
+      body: JSON.stringify({ text: searchText }),
+    });
+    const data = await response.json();
+    console.log(data);
+    setSimilarUsers(data.list);
+  };
   return (
     <ContactsList>
       <ModeSelect
@@ -80,7 +94,20 @@ const Logged = ({
           </option>
         ))}
       </ModeSelect>
-      <SearchBar></SearchBar>
+      <div>
+        <SearchBar
+          type="text"
+          value={searchText}
+          onChange={(event: any) => setSearchText(event.currentTarget.value)}
+          placeholder="Search.."
+          onKeyUp={get_users}
+        />
+      </div>
+      <FriendsList
+        friends_data={similarUsers}
+        loggedUserId={loggedUserId}
+        selectUser={selectElement}
+      />
       <Constacts big={user_friends.length > 10 ? 1 : 0}>
         {selectedMode === "friends" ? (
           <FriendsList

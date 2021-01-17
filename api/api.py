@@ -137,6 +137,39 @@ def messages():
     message = MessagesCollection.find(query)
 
 
+@app.route("/search_user", methods=['POST'])
+def search_user():
+    data = request.json
+    text = data['text']
+    res = []
+    similar_users = UsersCollection.find({'name': {'$regex': text}})
+    for user in similar_users:
+        res.append({"id": user['_id'], "img_link": user["image_link"], "name": user["name"],
+                    "status": user['status']})
+    return {'list': res}
+
+
+@app.route("/add_friend", methods=['POST'])
+def add_friend():
+    data = request.json
+    logged_user = UsersCollection.find_one({'_id': data['loggedUserId']})
+    selected_user = UsersCollection.find_one({'_id': data['selectedUserId']})
+    error = False
+    if selected_user['_id'] not in logged_user['friends_ids']:
+        ids = logged_user['friends_ids']
+        ids.append(selected_user['_id'])
+        UsersCollection.update_one({'_id': logged_user['_id']}, {"$set": {'friends_ids': ids}})
+    else:
+        error = True
+    if logged_user['_id'] not in selected_user['friends_ids']:
+        ids = selected_user['friends_ids']
+        ids.append(logged_user['_id'])
+        UsersCollection.update_one({'_id': selected_user['_id']}, {"$set": {'friends_ids': ids}})
+    else:
+        error = True
+    return {'error': error}
+
+
 app.run(debug=True)
 """
 users:s

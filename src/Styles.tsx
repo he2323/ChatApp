@@ -37,12 +37,24 @@ export const FriendOptions = styled.div`
   width: 100%;
   min-height: 80%;
   max-height: 80%;
-  background-color: white;
+  background-color: black;
   display: flex;
   flex-direction: column;
-  text-align: center;
+  align-items: center;
   justify-content: center;
   overflow-y: hidden;
+`;
+export const FriendButton = styled.button`
+  margin: 3px;
+  width: 70%;
+  height: 3rem;
+  font-weight: bolder;
+  font-size: 20px;
+  background-color: grey;
+  border-radius: 50px;
+  &:hover {
+    opacity: 0.5;
+  }
 `;
 export const ActualChat = styled.div`
   width: 100%;
@@ -88,9 +100,9 @@ export const ModeSelect = styled.select`
   background-color: black;
 
 `;
-export const SearchBar = styled.div`
+export const SearchBar = styled.input`
   width calc(15vw*0.9);
-  height: 5%;
+  height: 2rem;
   border-radius: 20px;
   background-color: red;
 `;
