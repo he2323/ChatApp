@@ -18,7 +18,8 @@ const FriendMng = ({ selectedElement, loggedUser }: FriendMngI) => {
       body: JSON.stringify({ loggedUserId: loggedUserId, selectedUserId: friendId }),
     });
     const data = await response.json();
-    console.log(data.error);
+    console.log(data);
+
     if (data.error === true) {
       alert(`we can't add this user to your friends for some reason`);
     }

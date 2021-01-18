@@ -1,76 +1,33 @@
+import { registerItemT } from "../Components/App";
 import { MainLogin, LoginImg, Forms, LoginLabel, LoginButton } from "../Styles";
 import InputField from "./InputField";
-import { HiMail, HiLockClosed } from "react-icons/hi";
 
 interface RegisterI {
-  mail: string;
-  password: string;
-  name: string;
-  nickname: string;
-  image_link: string;
+  registerItems: registerItemT[];
   toLogin: (status: boolean) => void;
-  changeMail: (value: string) => void;
-  changePassword: (value: string) => void;
-  changeName: (value: string) => void;
-  changeNickname: (value: string) => void;
-  changeImage_link: (value: string) => void;
   register: () => void;
 }
 
 const Register = ({
-  mail,
-  password,
-  name,
-  nickname,
-  image_link,
+  registerItems,
   toLogin,
-  changeMail,
-  changePassword,
-  changeName,
-  changeNickname,
-  changeImage_link,
   register,
 }: RegisterI): JSX.Element => {
   return (
     <MainLogin>
-      <LoginImg></LoginImg>
+      <LoginImg />
       <Forms>
         <LoginLabel>Member Register</LoginLabel>
-        <InputField
-          icon={<HiLockClosed />}
-          type={"text"}
-          placeholder={"name"}
-          value={name}
-          changeValue={changeName}
-        />
-        <InputField
-          icon={<HiMail />}
-          type={"email"}
-          placeholder={"mail"}
-          value={mail}
-          changeValue={(value: string): void => changeMail(value)}
-        />
-        <InputField
-          icon={<HiLockClosed />}
-          type={"password"}
-          placeholder={"password"}
-          value={password}
-          changeValue={changePassword}
-        />
-        <InputField
-          icon={<HiLockClosed />}
-          type={"text"}
-          placeholder={"nickname"}
-          value={nickname}
-          changeValue={changeNickname}
-        />
-        <InputField
-          icon={<HiLockClosed />}
-          type={"text"}
-          placeholder={"image_link"}
-          value={image_link}
-          changeValue={changeImage_link}
-        />
+        {registerItems.map((item: registerItemT, index: number) => (
+          <InputField
+            key={index}
+            icon={item.icon}
+            type={item.type}
+            placeholder={item.placeholder}
+            value={item.value}
+            changeValue={item.changeFun}
+          />
+        ))}
         <LoginButton type={"LoginButton"} onClick={() => register()}>
           Register
         </LoginButton>

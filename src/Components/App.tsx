@@ -6,6 +6,15 @@ import Login from "../Containers/Login";
 import Register from "../Containers/Register";
 import Logged from "./Logged";
 import { MainBody, MainApp } from "../Styles";
+import { HiMail, HiLockClosed } from "react-icons/hi";
+
+export type registerItemT = {
+  icon: any;
+  type: string;
+  placeholder: string;
+  value: string;
+  changeFun: () => void;
+};
 
 const App = () => {
   //data to store
@@ -20,9 +29,54 @@ const App = () => {
   const [selectedMode, setSelectedMode] = useState("startingPage");
   // eslint-disable-next-line
   const [privilege_level, setPrivilege_level] = useState(1); // (0- guest, 1- user, 3-admin) base 1, couse its for normal registration, still no guest login, and admin is speciall hcanging only in database
-  const [selectedElement, setSelectedElement] = useState({id: 0, type: "start"}); //store selected user id
+  const [selectedElement, setSelectedElement] = useState({
+    id: 0,
+    type: "start",
+  }); //store selected user id
   //basic navigation
-  
+  const changeName = (value: any) => setName(value);
+  const [registerItems, setRegisterItems] = useState();
+
+  useEffect(() => {
+    setRegisterItems([
+      {
+        icon: <HiLockClosed />,
+        type: "text",
+        placeholder: "name",
+        value: name,
+        changeFun: changeName,
+      },
+      {
+        icon: <HiMail />,
+        type: "email",
+        placeholder: "mail",
+        value: mail,
+        changeFun: setMail,
+      },
+      {
+        icon: <HiLockClosed />,
+        type: "password",
+        placeholder: "password",
+        value: password,
+        changeFun: setPassword,
+      },
+      {
+        icon: <HiLockClosed />,
+        type: "text",
+        placeholder: "nickname",
+        value: nickname,
+        changeFun: setNickname,
+      },
+      {
+        icon: <HiLockClosed />,
+        type: "text",
+        placeholder: "image link",
+        value: image_link,
+        changeFun: setImage_link,
+      },
+    ]);
+  }, [name, mail, password, nickname, image_link]);
+
   const toRegister = (): void => setUserHaveAccount(false);
 
   const changeUserStatus = (id: number) =>
@@ -147,18 +201,9 @@ const App = () => {
         ></Login>
       ) : (
         <Register
-          mail={mail}
-          password={password}
-          name={name}
-          nickname={nickname}
-          image_link={image_link}
+          registerItems={registerItems}
           register={registerUser}
           toLogin={setUserHaveAccount}
-          changeMail={setMail}
-          changePassword={setPassword}
-          changeName={setName}
-          changeNickname={setNickname}
-          changeImage_link={setImage_link}
         ></Register>
       )}
       <button onClick={() => console.log(selectedMode)}>log</button>

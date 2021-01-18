@@ -98,7 +98,11 @@ export const ModeSelect = styled.select`
   width calc(15vw*1.3);
   height: 5%;
   background-color: black;
-
+    &:hover{
+      cursor: pointer;
+    }
+`;
+export const ModeOption = styled.option`
 `;
 export const SearchBar = styled.input`
   width calc(15vw*0.9);
@@ -203,3 +207,18 @@ export const FriendImage = styled.img`
   height: 60%;
   max-width: 40%;
 `;
+export const SearchBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+`;
+export const CrossDel = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const SearchUsers = styled.div`
+  max-height: 90%;
+  overflow-y: auto;
+`

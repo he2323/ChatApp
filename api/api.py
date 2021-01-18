@@ -24,10 +24,6 @@ def increase_counter(counter_name):
 
 @app.before_request
 def before_request():
-    every_user_id = []
-    for i in UsersCollection.find():
-        every_user_id.append(i["_id"])
-    UsersCollection.update_one({"name": "admin"}, {"$set": {"friends_ids": every_user_id}})
     for chat in ChatCollection.find():
         found_user = False
         for user in UsersCollection.find():
@@ -49,7 +45,7 @@ def register():
         new_user = {"_id": increase_counter("users"), "email": data["mail"], "password": data["password"],
                     "name": data["name"],
                     "nickname": data['nickname'],
-                    "image_link": data['image_link'], "friends_ids": [1],
+                    "image_link": data['image_link'], "friends_ids": [],
                     "privilege_level": data['privilege_level'],
                     "create_date": date.today().strftime("%d/%m/%Y"),
                     "status": False}
@@ -155,19 +151,23 @@ def add_friend():
     logged_user = UsersCollection.find_one({'_id': data['loggedUserId']})
     selected_user = UsersCollection.find_one({'_id': data['selectedUserId']})
     error = False
+    msg = "nothing"
     if selected_user['_id'] not in logged_user['friends_ids']:
         ids = logged_user['friends_ids']
         ids.append(selected_user['_id'])
         UsersCollection.update_one({'_id': logged_user['_id']}, {"$set": {'friends_ids': ids}})
     else:
         error = True
+        msg = "error on logged"
     if logged_user['_id'] not in selected_user['friends_ids']:
         ids = selected_user['friends_ids']
         ids.append(logged_user['_id'])
         UsersCollection.update_one({'_id': selected_user['_id']}, {"$set": {'friends_ids': ids}})
     else:
         error = True
-    return {'error': error}
+        msg = "error on friend"
+
+    return {'error': error, "msg": msg}
 
 
 app.run(debug=True)

@@ -1,8 +1,18 @@
 import React from "react";
-import { ContactsList, ModeSelect, SearchBar, Constacts } from "../Styles";
+import {
+  ContactsList,
+  ModeSelect,
+  SearchBar,
+  Constacts,
+  SearchBox,
+  CrossDel,
+  ModeOption,
+  SearchUsers,
+} from "../Styles";
 import { useState, useEffect } from "react";
 import FriendsList from "../Containers/FriendsList";
 import ChatList from "../Containers/ChatList";
+import { ImCross } from "react-icons/im";
 export interface SelElementI {
   id: number;
   type: "friend" | "chat" | "start";
@@ -75,9 +85,11 @@ const Logged = ({
       body: JSON.stringify({ text: searchText }),
     });
     const data = await response.json();
-    console.log(data);
-    setSimilarUsers(data.list);
+    await setSimilarUsers(data.list);
   };
+  useEffect(() => {
+    if(searchText) get_users();
+  }, [searchText]);
   return (
     <ContactsList>
       <ModeSelect
@@ -89,12 +101,12 @@ const Logged = ({
         }}
       >
         {options.map((option: any) => (
-          <option key={option.value} value={option.value}>
+          <ModeOption key={option.value} value={option.value}>
             {option.label}
-          </option>
+          </ModeOption>
         ))}
       </ModeSelect>
-      <div>
+      <SearchBox>
         <SearchBar
           type="text"
           value={searchText}
@@ -102,12 +114,19 @@ const Logged = ({
           placeholder="Search.."
           onKeyUp={get_users}
         />
-      </div>
-      <FriendsList
-        friends_data={similarUsers}
-        loggedUserId={loggedUserId}
-        selectUser={selectElement}
-      />
+        <CrossDel onClick={() => setSearchText("")}>
+          <ImCross />
+        </CrossDel>
+      </SearchBox>
+      {searchText ? (
+        <SearchUsers onClick={() => setSearchText("")}>
+          <FriendsList
+            friends_data={similarUsers}
+            loggedUserId={loggedUserId}
+            selectUser={selectElement}
+          />
+        </SearchUsers>
+      ) : null}
       <Constacts big={user_friends.length > 10 ? 1 : 0}>
         {selectedMode === "friends" ? (
           <FriendsList
