@@ -14,7 +14,7 @@ const ChatList = ({ chats_data, loggedUserId, selectChat }: ChatsListI) => {
       {chats_data.map((chat: ElementI) => (
         <Chat
           id={chat.id}
-          key={chat.name}
+          key={chat.id}
           name={chat.name}
           image={chat.img_link}
           status={chat.status}

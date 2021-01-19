@@ -12,9 +12,10 @@ export interface FrienI {
 }
 export const Friend = ({ id, name, image, status, type, selectUser }: FrienI) => {
   return (
-    <Person onLoad={()=>console.log(`${type} of name: ${name} has id of: ${id}`)} onClick={() => selectUser({ id: id, type: type })}>
-      <FriendImage src={image} alt="friend image" />
+    <Person onLoad={()=>console.log(`${type} of name: ${name} has id of: ${id} and img link ${image}`)} onClick={() => selectUser({ id: id, type: type })}>
+      <FriendImage src={image} alt={type==="chat" ? "chat Image": "friend image"} />
       <div>{name}</div>
+      <div>{id}</div>
       <IconContext.Provider value={{ color: "darkgreen" }}>
         {status ? <GoPrimitiveDot /> : null}
       </IconContext.Provider>

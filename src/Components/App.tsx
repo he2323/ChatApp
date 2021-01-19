@@ -34,7 +34,6 @@ const App = () => {
     type: "start",
   }); //store selected user id
   //basic navigation
-  const changeName = (value: any) => setName(value);
   const [registerItems, setRegisterItems] = useState();
 
   useEffect(() => {
@@ -44,7 +43,7 @@ const App = () => {
         type: "text",
         placeholder: "name",
         value: name,
-        changeFun: changeName,
+        changeFun: setName,
       },
       {
         icon: <HiMail />,
@@ -185,6 +184,7 @@ const App = () => {
             selectMode={setSelectedMode}
           />
           <Chat
+            updateUser={updateUser}
             logOut={logOut}
             selectedElement={selectedElement}
             loggedUserId={loggedUser._id}

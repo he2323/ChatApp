@@ -121,9 +121,29 @@ def chats():
     res = []
     for chat in ChatCollection.find():
         if user_id in chat['members_ids']:
-            res.append({'id': 1, 'name': chat['name'], 'img_link': chat['img_link'], "status": chat['status']})
+            res.append({'id': chat['_id'], 'name': chat['name'], 'img_link': chat['img_link'], "status": chat['status']})
     # "id": chat['_id'],
     return {'list': sorted(res, key=lambda elem: elem['status'], reverse=True)}
+
+
+@app.route("/create_chat", methods=["POST"])
+def create_chat():
+    data = request.json
+    app.logger.warn(data)
+    if data['loggedUserId'] and data['selectedUserId']:
+        logged_user = UsersCollection.find_one({'_id': data['loggedUserId']})
+        selected_user = UsersCollection.find_one({'_id': data['selectedUserId']})
+        creator_name = logged_user['name']
+        creator_img = logged_user['image_link']
+        second_member_name = selected_user['name']
+        new_chat = {"_id": increase_counter("chats"), "name": creator_name + "+" + second_member_name,
+                    "img_link": creator_img, "members_ids": [data['loggedUserId'], data['selectedUserId']],
+                    "create_date": date.today().strftime("%d/%m/%Y"), "messages": [],
+                    "status": False}
+        ChatCollection.insert_one(new_chat)
+        return {"error": True}
+    else:
+        return {"error": False}
 
 
 @app.route("/messages", methods=['POST'])
@@ -162,6 +182,31 @@ def add_friend():
     if logged_user['_id'] not in selected_user['friends_ids']:
         ids = selected_user['friends_ids']
         ids.append(logged_user['_id'])
+        UsersCollection.update_one({'_id': selected_user['_id']}, {"$set": {'friends_ids': ids}})
+    else:
+        error = True
+        msg = "error on friend"
+
+    return {'error': error, "msg": msg}
+
+
+@app.route("/delete_friend", methods=['POST'])
+def delete_friend():
+    data = request.json
+    logged_user = UsersCollection.find_one({'_id': data['loggedUserId']})
+    selected_user = UsersCollection.find_one({'_id': data['selectedUserId']})
+    error = False
+    msg = "nothing"
+    if selected_user['_id'] in logged_user['friends_ids']:
+        ids = logged_user['friends_ids']
+        ids.remove(selected_user['_id'])
+        UsersCollection.update_one({'_id': logged_user['_id']}, {"$set": {'friends_ids': ids}})
+    else:
+        error = True
+        msg = "error on logged"
+    if logged_user['_id'] in selected_user['friends_ids']:
+        ids = selected_user['friends_ids']
+        ids.remove(logged_user['_id'])
         UsersCollection.update_one({'_id': selected_user['_id']}, {"$set": {'friends_ids': ids}})
     else:
         error = True
