@@ -171,7 +171,15 @@ const App = () => {
       }
     } else return;
   });
-
+useEffect(() => {
+  const interval = setInterval(async () => {
+    console.log("every 5 sec");
+    console.log(Date.now());
+    console.log(selectedElement);
+    setSelectedElement(selectedElement)
+  }, 5000)
+  return () => clearInterval(interval)
+}, [selectedElement])
   return (
     <MainBody>
       {userLogged ? (

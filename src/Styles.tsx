@@ -122,6 +122,9 @@ export const Person = styled.div`
   background-color: aqua;
   margin: 1px;
   padding-right: 20px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 export const Constacts = styled.div`
   display: flex;

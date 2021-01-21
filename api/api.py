@@ -121,7 +121,8 @@ def chats():
     res = []
     for chat in ChatCollection.find():
         if user_id in chat['members_ids']:
-            res.append({'id': chat['_id'], 'name': chat['name'], 'img_link': chat['img_link'], "status": chat['status']})
+            res.append(
+                {'id': chat['_id'], 'name': chat['name'], 'img_link': chat['img_link'], "status": chat['status']})
     # "id": chat['_id'],
     return {'list': sorted(res, key=lambda elem: elem['status'], reverse=True)}
 
@@ -144,13 +145,6 @@ def create_chat():
         return {"error": True}
     else:
         return {"error": False}
-
-
-@app.route("/messages", methods=['POST'])
-def messages():
-    data = request.json
-    query = {'message_group_id': data['group_id']}
-    message = MessagesCollection.find(query)
 
 
 @app.route("/search_user", methods=['POST'])
@@ -215,14 +209,42 @@ def delete_friend():
     return {'error': error, "msg": msg}
 
 
+@app.route("/messages_info", methods=["POST"])
+def messages_info():
+    data = request.json
+    app.logger.info(data)
+    if len(data["messages_ids"]) > 0:
+        messages_id = data["messages_ids"]
+        messages = []
+        for id in messages_id:
+            messages.append(MessagesCollection.find_one({"_id": id}))
+
+        return {"messages": messages}
+    return {"error": True}
+
+
+@app.route("/post_msg", methods=["POST"])
+def post_msg():
+    data = request.json
+    message_text = data["message"]
+    sender_id = data["sender_id"]
+    chat_id = data["chat_id"]
+    msgId = increase_counter("messages")
+    designated_chat = ChatCollection.find_one({"_id": chat_id})
+    new_message = {"_id": msgId, "text": message_text, "sender_id": sender_id}
+    MessagesCollection.insert_one(new_message)
+    designated_chat["messages"].append(msgId)
+    ChatCollection.update_one({"_id": chat_id}, {"$set": {"messages": designated_chat["messages"]}})
+    return "Ok"
+
 app.run(debug=True)
 """
 users:s
   user_id, user_email, user_password, user_name, user_nickname, user_image_link, user_friends: [friends_id], user_chat_id: [chat_id], user_privilege_level
 chats:
-  chat_id, chat_name, chat_members_id: [user_id], chat_img_link, chat_create_date, chat_status(if any member of chat is active, then true, else false)
+  chat_id, chat_name, chat_members_id: [user_id], chat_img_link, chat_create_date, chat_status(if any member of chat is active, then true, else false), messages_ids
 messages:
-  message_id, message_sender_id, message_group_id, message_text, message_type, message_img_link, message_send_date, message_send_time
+  message_id, message_sender_id, message_text, message_send_date, message_send_time
 counters:
   counter_id, counter_name, counter_value
 

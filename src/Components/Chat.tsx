@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { ChatMain, ActualChat, Message, MsgHandle } from "../Styles";
+import { ChatMain, ActualChat, Message } from "../Styles";
 import ChoosenPerson from "../Containers/ChoosenPerson";
 import { SelElementI } from "./Logged";
 import ChoosenChat from "../Containers/ChoosenChat";
 import StartGreet from "../Containers/StartGreet";
 import FriendMng from "./FriendMng";
+import MessasgeHandle from "../Containers/MessasgeHandle";
+import RepMsg from "../Containers/RepMsg"
 interface ChatI {
   logOut: () => void;
   updateUser: () => void;
@@ -14,8 +16,10 @@ interface ChatI {
 }
 const Chat = ({ logOut, updateUser, selectedElement, loggedUserId }: ChatI) => {
   const [sElementInfo, setsElementInfo] = useState({});
+  const [fetchMsg, setfetchMsg] = useState(false);
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  useEffect(() => {
+  useEffect(async () => {
     const fetchElementData = async () => {
       console.log(selectedElement);
       const elementResponse = await fetch(
@@ -29,24 +33,51 @@ const Chat = ({ logOut, updateUser, selectedElement, loggedUserId }: ChatI) => {
         }
       );
       const elementData = await elementResponse.json();
-      await setsElementInfo(elementData);
+      console.log(elementData);
+      setsElementInfo(elementData);
+      setfetchMsg(true);
     };
     const fetchMessages = async () => {
+      console.log(sElementInfo);
       const fetchedMessages = await fetch("/messages_info", {
         method: "POST",
         headers: {
           content_type: "application/json",
         },
-        body: JSON.stringify({ messages_ids: sElementInfo.messages }),
+        body: JSON.stringify({
+          messages_ids:
+            sElementInfo.messages
+        }),
       });
       const messagesData = await fetchedMessages.json();
-      await setMessages(messagesData);
+      setMessages(messagesData.messages);
+      console.log(messagesData.messages);
     };
     if (selectedElement.type !== "start") {
-      fetchElementData();
-      fetchMessages();
+      await fetchElementData();
+      if (
+        selectedElement.type === "chat" &&
+        sElementInfo.messages !== undefined
+      )
+        await fetchMessages();
     }
+    
   }, [selectedElement]);
+  const sendMsg = async () => {
+    await fetch("/post_msg", {
+      method: "POST",
+      headers: {
+        content_type: "application/json",
+      },
+      body: JSON.stringify({
+        message: message,
+        sender_id: loggedUserId,
+        chat_id: selectedElement.id,
+      }),
+    });
+    await updateUser();
+    setfetchMsg(!fetchMsg);
+  };
 
   return (
     <ChatMain>
@@ -68,12 +99,7 @@ const Chat = ({ logOut, updateUser, selectedElement, loggedUserId }: ChatI) => {
 
       {selectedElement.type === "chat" ? (
         <ActualChat>
-          {messages.map((msg: any) => {
-            <Message loggedUser={msg.sender_id === loggedUserId ? 1 : 0}>
-              {msg.text}
-            </Message>;
-          })}
-          <Message loggedUser={1}>somerandom text shit</Message>
+          <RepMsg loggedUserId = {loggedUserId} messages={messages}/>
           <button onClick={() => console.log(selectedElement)}>
             selected user log
           </button>
@@ -87,7 +113,11 @@ const Chat = ({ logOut, updateUser, selectedElement, loggedUserId }: ChatI) => {
       ) : (
         <StartGreet isPlaceholder={true} />
       )}
-      <MsgHandle></MsgHandle>
+      <MessasgeHandle
+        message={message}
+        changeMessage={setMessage}
+        sendMsg={sendMsg}
+      />
     </ChatMain>
   );
 };
