@@ -8,6 +8,8 @@ import StartGreet from "../Containers/StartGreet";
 import FriendMng from "./FriendMng";
 import MessasgeHandle from "../Containers/MessasgeHandle";
 import RepMsg from "../Containers/RepMsg";
+import { useRef } from "react";
+import { useInterval } from "react-use";
 interface ChatI {
   logOut: () => void;
   updateUser: () => void;
@@ -15,11 +17,22 @@ interface ChatI {
   loggedUserId: number;
   loggedUSer: any;
 }
-const Chat = ({ logOut, updateUser, selectedElement, loggedUserId, loggedUSer }: ChatI) => {
+const Chat = ({
+  logOut,
+  updateUser,
+  selectedElement,
+  loggedUserId,
+  loggedUSer,
+}: ChatI) => {
+  const messagesEndRef = useRef(null);
   const [sElementInfo, setsElementInfo] = useState({});
   const [fetchMsg, setfetchMsg] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
   const fetchElementData = async (id: number) => {
     console.log(`fetchElementData o id ${id}`);
     const elementResponse = await fetch(
@@ -52,29 +65,33 @@ const Chat = ({ logOut, updateUser, selectedElement, loggedUserId, loggedUSer }:
     setMessages(messagesData.messages);
   };
 
-  useEffect(() => {
-      const interval = setInterval(async () => {
-        console.log(`inter przed if  id:  ${selectedElement.id}`);
-        console.log(updateUser())
-      }, 10000);
-      return () => {
-        clearInterval(interval);
-      };
-    
-  }, []);
-
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     console.log(`inter przed if  id:  ${selectedElement.id}`);
+  //     console.log(updateUser());
+  //   }, 10000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, []);
   useEffect(() => {
     if (selectedElement.type === "chat") {
       console.log("zmiana fetch");
       setfetchMsg(false);
     }
+    scrollToBottom();
   }, [selectedElement]);
+useEffect(() => {
+  scrollToBottom()
+}, [messages])
   useEffect(async () => {
     if (selectedElement.type !== "start") {
       const data = await fetchElementData(selectedElement.id);
       if (selectedElement.type === "chat") fetchMessages(data);
     }
+    scrollToBottom();
   }, [selectedElement, fetchMsg, loggedUSer]);
+
   const sendMsg = async () => {
     await fetch("/post_msg", {
       method: "POST",
@@ -112,7 +129,11 @@ const Chat = ({ logOut, updateUser, selectedElement, loggedUserId, loggedUSer }:
       {/* // */}
       {selectedElement.type === "chat" ? (
         <ActualChat>
-          <RepMsg loggedUserId={loggedUserId} messages={messages} />
+          <RepMsg
+            loggedUserId={loggedUserId}
+            messages={messages}
+            messagesEndRef={messagesEndRef}
+          />
         </ActualChat>
       ) : selectedElement.type === "friend" ? (
         <FriendMng

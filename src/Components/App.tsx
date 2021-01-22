@@ -1,12 +1,15 @@
 // eslint-disable-next-line
 import { useState, useEffect } from "react";
 import { useBeforeunload } from "react-beforeunload";
+import { useIdle } from "react-use";
 import Chat from "./Chat";
 import Login from "../Containers/Login";
 import Register from "../Containers/Register";
 import Logged from "./Logged";
 import { MainBody, MainApp } from "../Styles";
 import { HiMail, HiLockClosed } from "react-icons/hi";
+import { isIdentifier } from "typescript";
+import { useInterval } from "react-use";
 
 export type registerItemT = {
   icon: any;
@@ -17,8 +20,8 @@ export type registerItemT = {
 };
 
 const App = () => {
+  const isIdle = useIdle(5000);
   //data to store
-  const [tmp, setTmp] = useState("")
   const [userLogged, setUserLogged] = useState(false);
   const [loggedUser, setLoggedUser] = useState({});
   const [userHaveAccount, setUserHaveAccount] = useState(true);
@@ -78,17 +81,16 @@ const App = () => {
   }, [name, mail, password, nickname, image_link]);
 
   const toRegister = (): void => setUserHaveAccount(false);
-const tmpState = () => setTmp(tmp+"1");
-  const changeUserStatus = (id: number) =>
+  const changeUserStatus = (id: number, status: boolean) =>
     fetch(`/status_change`, {
       method: "POST",
       headers: {
         content_type: "application/json",
       },
-      body: JSON.stringify({ id: id }),
+      body: JSON.stringify({ id: id, status: status }),
     });
   const logOut = () => {
-    changeUserStatus(loggedUser._id);
+    changeUserStatus(loggedUser._id, false);
     setSelectedElement(1);
     setUserLogged(false);
     setLoggedUser({});
@@ -133,7 +135,7 @@ const tmpState = () => setTmp(tmp+"1");
       if (data.err === false) {
         setLoggedUser(data);
         setUserLogged(true);
-        changeUserStatus(data._id);
+        changeUserStatus(data._id, true);
       } else {
         alert("bad pass or mail");
       }
@@ -162,12 +164,26 @@ const tmpState = () => setTmp(tmp+"1");
     return data.status;
   };
 
+  useInterval(
+    () => {
+      if (loggedUser._id) {
+        if (isIdle && loggedUser.status) {
+          changeUserStatus(loggedUser._id, false);
+          updateUser();
+        } else {
+          changeUserStatus(loggedUser._id, true);
+          updateUser();
+        }
+      }
+    },
+    loggedUser ? 5000 : null
+  );
   useBeforeunload(() => {
     if (userLogged) {
       const status = updateUser();
       console.log(loggedUser);
       if (status) {
-        changeUserStatus(loggedUser._id);
+        changeUserStatus(loggedUser._id, false);
         return "You'll lose your data!";
       }
     } else return;

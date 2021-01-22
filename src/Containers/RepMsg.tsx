@@ -1,6 +1,6 @@
 import { Message } from "../Styles";
 
-const RepMsg = ({ messages, loggedUserId }: any) => {
+const RepMsg = ({ messages, loggedUserId, messagesEndRef }: any) => {
   return (
     <>
       {messages.map((msg: any) => (
@@ -8,6 +8,7 @@ const RepMsg = ({ messages, loggedUserId }: any) => {
           {msg.text}
         </Message>
       ))}
+      <div ref={messagesEndRef} />
     </>
   );
 };

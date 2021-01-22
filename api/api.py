@@ -111,7 +111,7 @@ def status_change():
         query = {'_id': data['id']}
         user = UsersCollection.find_one(query)
         user_status = user["status"]
-        UsersCollection.update_one({"_id": data['id']}, {"$set": {"status": not user_status}})
+        UsersCollection.update_one({"_id": data['id']}, {"$set": {"status": data['status']}})
         return "git"
     return "nie git"
 
@@ -141,7 +141,7 @@ def create_chat():
         second_member_name = selected_user['name']
         new_chat = {"_id": increase_counter("chats"), "name": creator_name + "+" + second_member_name,
                     "img_link": creator_img, "members_ids": [data['loggedUserId'], data['selectedUserId']],
-                    "create_date": date.today().strftime("%d/%m/%Y"), "messages": [],
+                    "create_date": date.today().strftime("%d/%m/%Y"), "messages": [0],
                     "status": False}
         ChatCollection.insert_one(new_chat)
         return {"error": True}

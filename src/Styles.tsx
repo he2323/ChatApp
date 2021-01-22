@@ -102,6 +102,7 @@ export const ModeSelect = styled.select`
       cursor: pointer;
     }
 `;
+
 export const ModeOption = styled.option`
 `;
 export const SearchBar = styled.input`
