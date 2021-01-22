@@ -4,7 +4,7 @@ const RepMsg = ({ messages, loggedUserId }: any) => {
   return (
     <>
       {messages.map((msg: any) => (
-        <Message loggedUser={msg.sender_id === loggedUserId ? 1 : 0}>
+        <Message key={msg._id} loggedUser={msg.sender_id === loggedUserId ? 1 : 0}>
           {msg.text}
         </Message>
       ))}

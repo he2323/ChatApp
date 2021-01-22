@@ -7,62 +7,74 @@ import ChoosenChat from "../Containers/ChoosenChat";
 import StartGreet from "../Containers/StartGreet";
 import FriendMng from "./FriendMng";
 import MessasgeHandle from "../Containers/MessasgeHandle";
-import RepMsg from "../Containers/RepMsg"
+import RepMsg from "../Containers/RepMsg";
 interface ChatI {
   logOut: () => void;
   updateUser: () => void;
   selectedElement: SelElementI;
   loggedUserId: number;
+  loggedUSer: any;
 }
-const Chat = ({ logOut, updateUser, selectedElement, loggedUserId }: ChatI) => {
+const Chat = ({ logOut, updateUser, selectedElement, loggedUserId, loggedUSer }: ChatI) => {
   const [sElementInfo, setsElementInfo] = useState({});
   const [fetchMsg, setfetchMsg] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  useEffect(async () => {
-    const fetchElementData = async () => {
-      console.log(selectedElement);
-      const elementResponse = await fetch(
-        selectedElement.type === "friend" ? "/user_info" : "/chat_info",
-        {
-          method: "POST",
-          headers: {
-            content_type: "application/json",
-          },
-          body: JSON.stringify({ id: selectedElement.id }),
-        }
-      );
-      const elementData = await elementResponse.json();
-      console.log(elementData);
-      setsElementInfo(elementData);
-      setfetchMsg(true);
-    };
-    const fetchMessages = async () => {
-      console.log(sElementInfo);
-      const fetchedMessages = await fetch("/messages_info", {
+  const fetchElementData = async (id: number) => {
+    console.log(`fetchElementData o id ${id}`);
+    const elementResponse = await fetch(
+      selectedElement.type === "friend" ? "/user_info" : "/chat_info",
+      {
         method: "POST",
         headers: {
           content_type: "application/json",
         },
-        body: JSON.stringify({
-          messages_ids:
-            sElementInfo.messages
-        }),
-      });
-      const messagesData = await fetchedMessages.json();
-      setMessages(messagesData.messages);
-      console.log(messagesData.messages);
-    };
-    if (selectedElement.type !== "start") {
-      await fetchElementData();
-      if (
-        selectedElement.type === "chat" &&
-        sElementInfo.messages !== undefined
-      )
-        await fetchMessages();
-    }
+        body: JSON.stringify({ id: id }),
+      }
+    );
+    const elementData = await elementResponse.json();
+    setsElementInfo(elementData);
+    setfetchMsg(true);
+    return elementData;
+  };
+
+  const fetchMessages = async (data: any) => {
+    const fetchedMessages = await fetch("/messages_info", {
+      method: "POST",
+      headers: {
+        content_type: "application/json",
+      },
+      body: JSON.stringify({
+        messages_ids: data.messages,
+      }),
+    });
+    const messagesData = await fetchedMessages.json();
+    setMessages(messagesData.messages);
+  };
+
+  useEffect(() => {
+      const interval = setInterval(async () => {
+        console.log(`inter przed if  id:  ${selectedElement.id}`);
+        console.log(updateUser())
+      }, 10000);
+      return () => {
+        clearInterval(interval);
+      };
     
+  }, []);
+
+  useEffect(() => {
+    if (selectedElement.type === "chat") {
+      console.log("zmiana fetch");
+      setfetchMsg(false);
+    }
   }, [selectedElement]);
+  useEffect(async () => {
+    if (selectedElement.type !== "start") {
+      const data = await fetchElementData(selectedElement.id);
+      if (selectedElement.type === "chat") fetchMessages(data);
+    }
+  }, [selectedElement, fetchMsg, loggedUSer]);
   const sendMsg = async () => {
     await fetch("/post_msg", {
       method: "POST",
@@ -81,6 +93,7 @@ const Chat = ({ logOut, updateUser, selectedElement, loggedUserId }: ChatI) => {
 
   return (
     <ChatMain>
+      {/* // */}
       {selectedElement.type === "friend" ? (
         <ChoosenPerson
           logOut={logOut}
@@ -96,13 +109,10 @@ const Chat = ({ logOut, updateUser, selectedElement, loggedUserId }: ChatI) => {
       ) : (
         <StartGreet />
       )}
-
+      {/* // */}
       {selectedElement.type === "chat" ? (
         <ActualChat>
-          <RepMsg loggedUserId = {loggedUserId} messages={messages}/>
-          <button onClick={() => console.log(selectedElement)}>
-            selected user log
-          </button>
+          <RepMsg loggedUserId={loggedUserId} messages={messages} />
         </ActualChat>
       ) : selectedElement.type === "friend" ? (
         <FriendMng
@@ -113,11 +123,13 @@ const Chat = ({ logOut, updateUser, selectedElement, loggedUserId }: ChatI) => {
       ) : (
         <StartGreet isPlaceholder={true} />
       )}
+      {/*  */}
       <MessasgeHandle
         message={message}
         changeMessage={setMessage}
         sendMsg={sendMsg}
       />
+      {/*  */}
     </ChatMain>
   );
 };

@@ -85,8 +85,10 @@ def user_info():
 @app.route("/chat_info", methods=['POST'])
 def chat_info():
     data = request.json
-    return ChatCollection.find_one({'_id': data['id']})
-
+    app.logger.info(data)
+    if data["id"] != 0:
+        return ChatCollection.find_one({'_id': data['id']})
+    return {"error": False}
 
 @app.route("/friends_info", methods=['POST'])
 def friends_info():
@@ -212,7 +214,6 @@ def delete_friend():
 @app.route("/messages_info", methods=["POST"])
 def messages_info():
     data = request.json
-    app.logger.info(data)
     if len(data["messages_ids"]) > 0:
         messages_id = data["messages_ids"]
         messages = []
@@ -236,6 +237,7 @@ def post_msg():
     designated_chat["messages"].append(msgId)
     ChatCollection.update_one({"_id": chat_id}, {"$set": {"messages": designated_chat["messages"]}})
     return "Ok"
+
 
 app.run(debug=True)
 """

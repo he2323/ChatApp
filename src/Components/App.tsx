@@ -18,6 +18,7 @@ export type registerItemT = {
 
 const App = () => {
   //data to store
+  const [tmp, setTmp] = useState("")
   const [userLogged, setUserLogged] = useState(false);
   const [loggedUser, setLoggedUser] = useState({});
   const [userHaveAccount, setUserHaveAccount] = useState(true);
@@ -77,7 +78,7 @@ const App = () => {
   }, [name, mail, password, nickname, image_link]);
 
   const toRegister = (): void => setUserHaveAccount(false);
-
+const tmpState = () => setTmp(tmp+"1");
   const changeUserStatus = (id: number) =>
     fetch(`/status_change`, {
       method: "POST",
@@ -171,15 +172,15 @@ const App = () => {
       }
     } else return;
   });
-useEffect(() => {
-  const interval = setInterval(async () => {
-    console.log("every 5 sec");
-    console.log(Date.now());
-    console.log(selectedElement);
-    setSelectedElement(selectedElement)
-  }, 5000)
-  return () => clearInterval(interval)
-}, [selectedElement])
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     console.log("every 5 sec");
+  //     console.log(Date.now());
+  //     console.log(selectedElement);
+  //     setSelectedElement(selectedElement)
+  //   }, 5000)
+  //   return () => clearInterval(interval)
+  // }, [selectedElement])
   return (
     <MainBody>
       {userLogged ? (
@@ -192,6 +193,7 @@ useEffect(() => {
             selectMode={setSelectedMode}
           />
           <Chat
+            loggedUSer={loggedUser}
             updateUser={updateUser}
             logOut={logOut}
             selectedElement={selectedElement}
@@ -214,7 +216,7 @@ useEffect(() => {
           toLogin={setUserHaveAccount}
         ></Register>
       )}
-      <button onClick={() => console.log(selectedMode)}>log</button>
+      <button onClick={() => console.log(selectedElement)}>log</button>
     </MainBody>
   );
 };
