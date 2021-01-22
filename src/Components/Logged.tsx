@@ -40,6 +40,7 @@ const Logged = ({
 }: UserO) => {
   const [user_friends_data_list, setUser_friends_data_list] = useState([]);
   const [user_chat_data_list, setuser_chat_data_list] = useState([]);
+  // eslint-disable-next-line
   const [options, setOptions] = useState([
     { label: "Start", value: "startingPage" },
     { label: "Friends", value: "friends" },
@@ -74,8 +75,7 @@ const Logged = ({
     };
     if (user_friends.length > 0) fetchUserFriendsData();
     fetchUserChatsData();
-  }, [user_friends]);
-  const show_dropdown = () => {};
+  }, [user_friends, loggedUserId]);
   const get_users = async () => {
     const response = await fetch("/search_user", {
       method: "POST",
@@ -88,7 +88,9 @@ const Logged = ({
     await setSimilarUsers(data.list);
   };
   useEffect(() => {
-    if(searchText) get_users();
+    if (searchText) {
+      get_users();
+    }
   }, [searchText]);
   return (
     <ContactsList>

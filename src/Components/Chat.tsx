@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { ChatMain, ActualChat, Message } from "../Styles";
+import { ChatMain, ActualChat } from "../Styles";
 import ChoosenPerson from "../Containers/ChoosenPerson";
 import { SelElementI } from "./Logged";
 import ChoosenChat from "../Containers/ChoosenChat";
@@ -9,7 +9,6 @@ import FriendMng from "./FriendMng";
 import MessasgeHandle from "../Containers/MessasgeHandle";
 import RepMsg from "../Containers/RepMsg";
 import { useRef } from "react";
-import { useInterval } from "react-use";
 interface ChatI {
   logOut: () => void;
   updateUser: () => void;
@@ -64,16 +63,6 @@ const Chat = ({
     const messagesData = await fetchedMessages.json();
     setMessages(messagesData.messages);
   };
-
-  // useEffect(() => {
-  //   const interval = setInterval(async () => {
-  //     console.log(`inter przed if  id:  ${selectedElement.id}`);
-  //     console.log(updateUser());
-  //   }, 10000);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // }, []);
   useEffect(() => {
     if (selectedElement.type === "chat") {
       console.log("zmiana fetch");
@@ -81,12 +70,12 @@ const Chat = ({
     }
     scrollToBottom();
   }, [selectedElement]);
-useEffect(() => {
-  scrollToBottom()
-}, [messages])
-  useEffect(async () => {
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+  useEffect( () => {
     if (selectedElement.type !== "start") {
-      const data = await fetchElementData(selectedElement.id);
+      const data = fetchElementData(selectedElement.id);
       if (selectedElement.type === "chat") fetchMessages(data);
     }
     scrollToBottom();

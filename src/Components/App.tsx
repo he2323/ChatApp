@@ -8,7 +8,6 @@ import Register from "../Containers/Register";
 import Logged from "./Logged";
 import { MainBody, MainApp } from "../Styles";
 import { HiMail, HiLockClosed } from "react-icons/hi";
-import { isIdentifier } from "typescript";
 import { useInterval } from "react-use";
 
 export type registerItemT = {
@@ -36,8 +35,7 @@ const App = () => {
   const [selectedElement, setSelectedElement] = useState({
     id: 0,
     type: "start",
-  }); //store selected user id
-  //basic navigation
+  }); 
   const [registerItems, setRegisterItems] = useState();
 
   useEffect(() => {
@@ -141,16 +139,15 @@ const App = () => {
       }
     } else alert("to short");
   };
-  // eslint-disable-next-line
-  const deleteUser = (id: number) => {
-    fetch(`/deleteUser`, {
-      method: "POST",
-      headers: {
-        content_type: "application/json",
-      },
-      body: JSON.stringify({ id: id }),
-    }).then(updateUser);
-  };
+  // const deleteUser = (id: number) => {
+  //   fetch(`/deleteUser`, {
+  //     method: "POST",
+  //     headers: {
+  //       content_type: "application/json",
+  //     },
+  //     body: JSON.stringify({ id: id }),
+  //   }).then(updateUser);
+  // };
   const updateUser = async () => {
     const response = await fetch(`/user_info`, {
       method: "POST",
