@@ -3,16 +3,15 @@ import { useState, useEffect } from "react";
 import { useBeforeunload } from "react-beforeunload";
 import { useIdle } from "react-use";
 import Chat from "./Chat";
-import Login from "../Containers/Login";
-import Register from "../Containers/Register";
+import InitialOperation from "../Containers/InitialOperation";
+
 import Logged from "./Logged";
 import { MainBody, MainApp } from "../Styles";
 import { HiMail, HiLockClosed } from "react-icons/hi";
 import { useInterval } from "react-use";
-import { IconType } from "react-icons";
 
-export type registerItemT = {
-  icon: IconType;
+export type InitialOperationItemT = {
+  icon: any;
   type: string;
   placeholder: string;
   value: string;
@@ -37,9 +36,25 @@ const App = () => {
     id: 0,
     type: "start",
   });
-  const [registerItems, setRegisterItems] = useState();
-
+  const [registerItems, setRegisterItems] = useState([]);
+  const [loginItems, setLoginItems] = useState([]);
   useEffect(() => {
+    setLoginItems([
+      {
+        icon: <HiMail />,
+        type: "text",
+        placeholder: "mail",
+        value: mail,
+        changeFun: setMail,
+      },
+      {
+        icon: <HiLockClosed />,
+        type: "password",
+        placeholder: "password",
+        value: password,
+        changeFun: setPassword,
+      },
+    ]);
     setRegisterItems([
       {
         icon: <HiLockClosed />,
@@ -79,7 +94,6 @@ const App = () => {
     ]);
   }, [name, mail, password, nickname, image_link]);
 
-  const toRegister = (): void => setUserHaveAccount(false);
   const changeUserStatus = (id: number, status: boolean) =>
     fetch(`/status_change`, {
       method: "POST",
@@ -215,22 +229,20 @@ const App = () => {
           />
         </MainApp>
       ) : userHaveAccount ? (
-        <Login
-          mail={mail}
-          password={password}
-          changeMail={setMail}
-          changePassword={setPassword}
-          toRegister={toRegister}
-          logIn={logIn}
-        ></Login>
+        <InitialOperation
+          items={loginItems}
+          text={"login"}
+          changedestinationFunc={() => setUserHaveAccount(false)}
+          func={logIn}
+        />
       ) : (
-        <Register
-          registerItems={registerItems}
-          register={registerUser}
-          toLogin={setUserHaveAccount}
-        ></Register>
+        <InitialOperation
+          items={registerItems}
+          text={"register"}
+          changedestinationFunc={() => setUserHaveAccount(true)}
+          func={registerUser}
+        />
       )}
-      <button onClick={() => console.log(selectedElement)}>log</button>
     </MainBody>
   );
 };

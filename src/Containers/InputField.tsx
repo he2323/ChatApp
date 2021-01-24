@@ -1,7 +1,7 @@
 import { InputContainer, InputIcon, InputAct } from "../Styles";
 
 interface InputI {
-  icon: any;
+  icon: Element;
   type: string;
   placeholder: string;
   value: string;
