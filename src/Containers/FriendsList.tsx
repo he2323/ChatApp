@@ -4,7 +4,7 @@ import { ElementI, SelElementI } from "../Components/Logged";
 interface FriendsListI{
     friends_data: ElementI[];
     loggedUserId: number;
-    selectUser: ({id, type}:SelElementI) => any;
+    selectUser: ({id, type}:SelElementI) => void;
 }
 
 const FriendsList = ({friends_data, loggedUserId, selectUser}:FriendsListI) => {

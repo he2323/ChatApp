@@ -8,7 +8,7 @@ export interface FrienI {
   image: string;
   status: boolean;
   type: "friend" | "chat";
-  selectUser: ({ id, type }: SelElementI) => any;
+  selectUser: ({ id, type }: SelElementI) => void;
 }
 export const Friend = ({ id, name, image, status, type, selectUser }: FrienI) => {
   return (

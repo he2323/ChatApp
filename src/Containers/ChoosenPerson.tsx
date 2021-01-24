@@ -3,7 +3,7 @@ import { ChoosenPerson as PersonDiv, FriendImage } from "../Styles";
 export interface ChoosenI {
   name: string;
   image: string;
-  logOut: () => any;
+  logOut: () => void;
 }
 const ChoosenPerson = ({ logOut, name, image }: ChoosenI) => {
   return (

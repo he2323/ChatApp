@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ContactsList,
   ModeSelect,
@@ -21,8 +20,8 @@ export interface UserO {
   user_friends: number[];
   loggedUserId: number;
   selectedMode: string;
-  selectElement: ({ id, type }: SelElementI) => any;
-  selectMode: (mode: string) => any;
+  selectElement: ({ id, type }: SelElementI) => void;
+  selectMode: (mode: string) => void;
 }
 export interface ElementI {
   id: number;
@@ -30,7 +29,10 @@ export interface ElementI {
   img_link: string;
   status: boolean;
 }
-
+type OptionT = {
+  label: string;
+  value: string | number;
+}
 const Logged = ({
   user_friends,
   loggedUserId,
@@ -96,13 +98,13 @@ const Logged = ({
     <ContactsList>
       <ModeSelect
         defaultValue={selectedMode}
-        onChange={(event: any) => {
+        onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
           selectMode(event.currentTarget.value);
           if (event.currentTarget.value === "startingPage")
             selectElement({ id: 0, type: "start" });
         }}
       >
-        {options.map((option: any) => (
+        {options.map((option: OptionT) => (
           <ModeOption key={option.value} value={option.value}>
             {option.label}
           </ModeOption>
@@ -112,7 +114,7 @@ const Logged = ({
         <SearchBar
           type="text"
           value={searchText}
-          onChange={(event: any) => setSearchText(event.currentTarget.value)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchText(event.currentTarget.value)}
           placeholder="Search.."
           onKeyUp={get_users}
         />

@@ -5,7 +5,7 @@ import { Friend as Chat } from "./Friend";
 interface ChatsListI {
   chats_data: ElementI[];
   loggedUserId: number;
-  selectChat: ({ id, type }: SelElementI) => any;
+  selectChat: ({ id, type }: SelElementI) => void;
 }
 const ChatList = ({ chats_data, loggedUserId, selectChat }: ChatsListI) => {
 

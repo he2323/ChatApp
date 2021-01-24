@@ -1,20 +1,22 @@
-import { MsgHandle } from "../Styles";
+import { MsgHandle, MsgInput } from "../Styles";
 
 interface MsgI {
   message: string;
   changeMessage: (value: string) => void;
-  sendMsg: () => void
+  sendMsg: () => void;
 }
 
 const MessasgeHandle = ({ message, changeMessage, sendMsg }: MsgI) => {
   return (
     <MsgHandle>
-      <textarea
+      <MsgInput
         name="msg"
         id="msg"
         placeholder="wiadomość"
         value={message}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>changeMessage(e.currentTarget.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          changeMessage(e.currentTarget.value)
+        }
       />
       <button onClick={sendMsg}>Send</button>
     </MsgHandle>

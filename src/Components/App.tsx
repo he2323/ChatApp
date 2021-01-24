@@ -9,9 +9,10 @@ import Logged from "./Logged";
 import { MainBody, MainApp } from "../Styles";
 import { HiMail, HiLockClosed } from "react-icons/hi";
 import { useInterval } from "react-use";
+import { IconType } from "react-icons";
 
 export type registerItemT = {
-  icon: any;
+  icon: IconType;
   type: string;
   placeholder: string;
   value: string;
@@ -35,7 +36,7 @@ const App = () => {
   const [selectedElement, setSelectedElement] = useState({
     id: 0,
     type: "start",
-  }); 
+  });
   const [registerItems, setRegisterItems] = useState();
 
   useEffect(() => {
@@ -157,7 +158,7 @@ const App = () => {
       body: JSON.stringify({ id: loggedUser._id }),
     });
     const data = await response.json();
-    await setLoggedUser(data);
+    setLoggedUser(data);
     return data.status;
   };
 
@@ -168,7 +169,7 @@ const App = () => {
           changeUserStatus(loggedUser._id, false);
           updateUser();
         } else {
-          changeUserStatus(loggedUser._id, true);
+          if (!loggedUser.status) changeUserStatus(loggedUser._id, true);
           updateUser();
         }
       }

@@ -65,21 +65,30 @@ export const ActualChat = styled.div`
   flex-direction: column;
   overflow-y: auto;
 `;
+type MessageT = {
+  loggedUser: boolean;
+}
 export const Message = styled.div`
-  width: 75%;
+  
   max-width: 75%;
   height: auto;
   margin-top: 2px;
   margin-bottom: 2px;
-  text-align: ${(props: any) => (props.loggedUser ? "right" : "left")};
-  background-color: ${(props: any) =>
-    props.loggedUser ? "lightblue" : "lightgrey"};
-  margin-${(props: any) => (props.loggedUser ? "left" : "right")}: 25%;
+  text-align: ${({loggedUser}: MessageT) => (loggedUser ? "right" : "left")};
+  background-color: ${({loggedUser}: MessageT) =>
+    loggedUser ? "lightblue" : "lightgrey"};
+  margin-${({loggedUser}: MessageT) => (loggedUser ? "left" : "right")}: 25%;
 `;
 export const MsgHandle = styled.div`
   width: 100%;
   height: 10%;
   background-color: black;
+`;
+export const MsgInput = styled.input`
+width: 70%;
+height: 50%;
+
+
 `;
 export const ContactsList = styled.div`
   display: flex;
@@ -206,10 +215,10 @@ export const LoginButton = styled.button`
 `;
 
 export const FriendImage = styled.img`
-  border-radius: 75px;
+  border-radius: 50%;
   margin-left: 5%;
-  height: 60%;
-  max-width: 40%;
+  height: 3rem;
+  width: 3rem;
 `;
 export const SearchBox = styled.div`
   display: flex;
@@ -226,3 +235,4 @@ export const SearchUsers = styled.div`
   max-height: 90%;
   overflow-y: auto;
 `
+
