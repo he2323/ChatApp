@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FriendOptions, FriendButton } from "../Styles";
-import { SelElementI } from "./Logged";
+import { SelElementI } from "./UserPanel";
 
 interface FriendMngI {
   selectedElement: SelElementI;

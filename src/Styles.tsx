@@ -67,28 +67,34 @@ export const ActualChat = styled.div`
 `;
 type MessageT = {
   loggedUser: boolean;
-}
+};
 export const Message = styled.div`
-  
+word-break: break-all;
   max-width: 75%;
   height: auto;
-  margin-top: 2px;
-  margin-bottom: 2px;
-  text-align: ${({loggedUser}: MessageT) => (loggedUser ? "right" : "left")};
-  background-color: ${({loggedUser}: MessageT) =>
+  margin-top: 4px;
+  margin-bottom: 4px;
+  text-align: ${({ loggedUser }: MessageT) => (loggedUser ? "right" : "left")};
+  background-color: ${({ loggedUser }: MessageT) =>
     loggedUser ? "lightblue" : "lightgrey"};
-  margin-${({loggedUser}: MessageT) => (loggedUser ? "left" : "right")}: 25%;
+  margin-${({ loggedUser }: MessageT) => (loggedUser ? "left" : "right")}: 25%;
 `;
 export const MsgHandle = styled.div`
   width: 100%;
   height: 10%;
   background-color: black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
-export const MsgInput = styled.input`
-width: 70%;
-height: 50%;
-
-
+export const MsgInput = styled.textarea`
+  width: 70%;
+  height: 4rem;
+`;
+export const MsgSendButton = styled.button`
+  height: 2rem;
+  width: 2rem;
 `;
 export const ContactsList = styled.div`
   display: flex;
@@ -112,8 +118,7 @@ export const ModeSelect = styled.select`
     }
 `;
 
-export const ModeOption = styled.option`
-`;
+export const ModeOption = styled.option``;
 export const SearchBar = styled.input`
   width calc(15vw*0.9);
   height: 2rem;
@@ -149,7 +154,7 @@ export const Constacts = styled.div`
   overflow-x: hidden;
 `;
 //Login
-export const MainLogin = styled.div`
+export const MainInitialOperation = styled.div`
   display: flex;
   flex-wrap: wrap
   align-items: center;
@@ -157,7 +162,7 @@ export const MainLogin = styled.div`
   width: 90%;
   height: 90%;
 `;
-export const LoginImg = styled.div`
+export const InitialOperationImg = styled.div`
   width: 50%;
   height: 100%;
   background-image: url(${loginImg});
@@ -174,7 +179,7 @@ export const Forms = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export const LoginLabel = styled.label`
+export const InitialOperationLabel = styled.label`
   font-size: 40px;
   font-weight: bolder;
   color: white;
@@ -206,7 +211,7 @@ export const InputAct = styled.input`
     outline: none;
   }
 `;
-export const LoginButton = styled.button`
+export const InitialOperationButton = styled.button`
   width: 10rem;
   height: 3rem;
   border-radius: 70px;
@@ -234,5 +239,4 @@ export const CrossDel = styled.div`
 export const SearchUsers = styled.div`
   max-height: 90%;
   overflow-y: auto;
-`
-
+`;

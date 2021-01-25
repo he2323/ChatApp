@@ -1,7 +1,7 @@
 import { Person, FriendImage } from "../Styles";
 import { GoPrimitiveDot } from "react-icons/go";
 import { IconContext } from "react-icons";
-import { SelElementI } from "../Components/Logged";
+import { SelElementI } from "../Components/UserPanel";
 export interface FrienI {
   id: number;
   name: string;

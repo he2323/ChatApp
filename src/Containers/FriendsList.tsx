@@ -1,5 +1,5 @@
 import {Friend} from "./Friend"
-import { ElementI, SelElementI } from "../Components/Logged";
+import { ElementI, SelElementI } from "../Components/UserPanel";
 
 interface FriendsListI{
     friends_data: ElementI[];

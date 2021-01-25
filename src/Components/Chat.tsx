@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { ChatMain, ActualChat } from "../Styles";
+import { ChatMain, ActualChat, Message } from "../Styles";
 import ChoosenPerson from "../Containers/ChoosenPerson";
-import { SelElementI } from "./Logged";
+import { SelElementI } from "./UserPanel";
 import ChoosenChat from "../Containers/ChoosenChat";
 import StartGreet from "../Containers/StartGreet";
 import FriendMng from "./FriendMng";
@@ -23,7 +23,7 @@ type ChatInfoT = {
   members_ids: number[];
   img_link: string;
   create_date: string;
-}
+};
 const Chat = ({
   logOut,
   updateUser,
@@ -36,7 +36,7 @@ const Chat = ({
   const [fetchMsg, setfetchMsg] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-
+  const [oldMessages, setOldMessages] = useState([]);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -70,42 +70,53 @@ const Chat = ({
     const messagesData = await fetchedMessages.json();
     setMessages(messagesData.messages);
   };
-  useEffect(() => {
-    if (selectedElement.type === "chat") {
-      setfetchMsg(false);
-    }
-    scrollToBottom();
-  }, [selectedElement]);
+  // useEffect(() => {
+  //   if (selectedElement.type === "chat") {
+  //     setfetchMsg(false);
+  //   }
+  // }, [selectedElement]);
 
   useEffect(() => {
-    scrollToBottom();
+    if (oldMessages.length > 0) {
+      if (
+        oldMessages[oldMessages.length - 1]._id ===
+        messages[messages.length - 1]._id
+      ) {
+        scrollToBottom();
+      }
+    }
+    setOldMessages([...messages]);
   }, [messages]);
 
   useEffect(() => {
-    const checkMessages = async() =>{if (selectedElement.type !== "start") {
-      const data: ChatInfoT = await fetchElementData(selectedElement.id);
-      if (selectedElement.type === "chat") {
-        fetchMessages(data.messages);
+    const checkMessages = async () => {
+      if (selectedElement.type !== "start") {
+        const data: ChatInfoT = await fetchElementData(selectedElement.id);
+        if (selectedElement.type === "chat") {
+          fetchMessages(data.messages);
+        }
       }
-    }}
+    };
     checkMessages();
     scrollToBottom();
   }, [selectedElement, fetchMsg, loggedUSer]);
 
   const sendMsg = async () => {
-    await fetch("/post_msg", {
-      method: "POST",
-      headers: {
-        content_type: "application/json",
-      },
-      body: JSON.stringify({
-        message: message,
-        sender_id: loggedUserId,
-        chat_id: selectedElement.id,
-      }),
-    });
-    await updateUser();
-    setfetchMsg(!fetchMsg);
+    if (message.length > 0) {
+      await fetch("/post_msg", {
+        method: "POST",
+        headers: {
+          content_type: "application/json",
+        },
+        body: JSON.stringify({
+          message: message,
+          sender_id: loggedUserId,
+          chat_id: selectedElement.id,
+        }),
+      });
+      await updateUser();
+      setfetchMsg(!fetchMsg);
+    }
   };
 
   return (

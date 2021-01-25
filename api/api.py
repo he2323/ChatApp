@@ -231,11 +231,12 @@ def post_msg():
     sender_id = data["sender_id"]
     chat_id = data["chat_id"]
     msgId = increase_counter("messages")
-    designated_chat = ChatCollection.find_one({"_id": chat_id})
-    new_message = {"_id": msgId, "text": message_text, "sender_id": sender_id}
-    MessagesCollection.insert_one(new_message)
-    designated_chat["messages"].append(msgId)
-    ChatCollection.update_one({"_id": chat_id}, {"$set": {"messages": designated_chat["messages"]}})
+    if len(message_text)>0:
+        designated_chat = ChatCollection.find_one({"_id": chat_id})
+        new_message = {"_id": msgId, "text": message_text, "sender_id": sender_id}
+        MessagesCollection.insert_one(new_message)
+        designated_chat["messages"].append(msgId)
+        ChatCollection.update_one({"_id": chat_id}, {"$set": {"messages": designated_chat["messages"]}})
     return "Ok"
 
 

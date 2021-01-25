@@ -1,4 +1,4 @@
-import { ElementI, SelElementI } from "../Components/Logged";
+import { ElementI, SelElementI } from "../Components/UserPanel";
 import { Friend as Chat } from "./Friend";
 
 

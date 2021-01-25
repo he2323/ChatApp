@@ -1,10 +1,10 @@
 import { InitialOperationItemT } from "../Components/App";
 import {
-  MainLogin,
-  LoginImg,
+    MainInitialOperation,
+  InitialOperationImg,
   Forms,
-  LoginLabel as RegisterLabel,
-  LoginButton as RegisterButton,
+  InitialOperationLabel,
+  InitialOperationButton,
 } from "../Styles";
 import InputField from "./InputField";
 
@@ -21,10 +21,10 @@ const InitialOperation = ({
   func,
 }: InitialOperationI) => {
   return (
-    <MainLogin>
-      <LoginImg />
+    <MainInitialOperation>
+      <InitialOperationImg />
       <Forms>
-        <RegisterLabel>Member {text}</RegisterLabel>
+        <InitialOperationLabel>Member {text}</InitialOperationLabel>
         {items.map((item: InitialOperationItemT, index: number) => (
           <InputField
             key={index}
@@ -35,12 +35,12 @@ const InitialOperation = ({
             changeValue={item.changeFun}
           />
         ))}
-        <RegisterButton onClick={func}>{text}</RegisterButton>
+        <InitialOperationButton onClick={func}>{text}</InitialOperationButton>
         <div>
           <div onClick={changedestinationFunc}>try to {text}</div>
         </div>
       </Forms>
-    </MainLogin>
+    </MainInitialOperation>
   );
 };
 

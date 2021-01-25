@@ -5,7 +5,7 @@ import { useIdle } from "react-use";
 import Chat from "./Chat";
 import InitialOperation from "../Containers/InitialOperation";
 
-import Logged from "./Logged";
+import Logged from "./UserPanel";
 import { MainBody, MainApp } from "../Styles";
 import { HiMail, HiLockClosed } from "react-icons/hi";
 import { useInterval } from "react-use";

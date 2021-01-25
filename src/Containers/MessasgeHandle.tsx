@@ -1,5 +1,5 @@
-import { MsgHandle, MsgInput } from "../Styles";
-
+import { MsgHandle, MsgInput, MsgSendButton } from "../Styles";
+import {AiOutlineSend} from "react-icons/ai"
 interface MsgI {
   message: string;
   changeMessage: (value: string) => void;
@@ -14,11 +14,11 @@ const MessasgeHandle = ({ message, changeMessage, sendMsg }: MsgI) => {
         id="msg"
         placeholder="wiadomość"
         value={message}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
           changeMessage(e.currentTarget.value)
         }
       />
-      <button onClick={sendMsg}>Send</button>
+      <MsgSendButton onClick={sendMsg}><AiOutlineSend/></MsgSendButton>
     </MsgHandle>
   );
 };
