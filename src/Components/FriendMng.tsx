@@ -28,7 +28,8 @@ const FriendMng = ({ selectedElement, loggedUser, updateUser }: FriendMngI) => {
     if (data.error === true) {
       alert(`we can't add this user to your friends for some reason`);
     } else {
-      updateUser();
+      await createChat(loggedUserId, friendId);
+      // updateUser();
     }
   };
   const deleteFromFriends = async (loggedUserId: number, friendId: number) => {

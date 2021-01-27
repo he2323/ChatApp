@@ -103,6 +103,7 @@ export const ContactsList = styled.div`
   width: calc(25vw * 0.9);
   height: 100%;
   background-color: lime;
+  overflow-y: auto;
 `;
 export const ModeSelect = styled.select`
   display: flex;
@@ -132,8 +133,8 @@ export const Person = styled.div`
   align-items: center;
   justify-content: space-between;
   width calc(18vw*0.9);
-  height: 10%;
-  min-height: 10%;
+  height: 4rem;
+  // min-height: 10%;
   background-color: aqua;
   margin: 1px;
   padding-right: 20px;
@@ -150,7 +151,7 @@ export const Constacts = styled.div`
   height: 90%;
   margin-top: 5px;
   max-height: 90%;
-  overflow-y: ${(props: any) => (props.big ? "scroll" : "hidden")};
+  overflow-y: auto;
   overflow-x: hidden;
 `;
 //Login

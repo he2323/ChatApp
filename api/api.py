@@ -90,6 +90,7 @@ def chat_info():
         return ChatCollection.find_one({'_id': data['id']})
     return {"error": False}
 
+
 @app.route("/friends_info", methods=['POST'])
 def friends_info():
     data = request.json

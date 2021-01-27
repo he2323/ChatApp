@@ -128,13 +128,13 @@ const Chat = ({
   return (
     <ChatMain>
       {/* // */}
-      {selectedElement.type === "friend" ? (
+      {selectedElement.type === "friend" || selectedElement.type === "friendMng" ? (
         <ChoosenPerson
           logOut={logOut}
           image={sElementInfo.image_link}
           name={sElementInfo.name}
         />
-      ) : selectedElement.type === "chat" ? (
+      ) : selectedElement.type === "chat" || selectedElement.type === "chatMng" ? (
         <ChoosenChat
           logOut={logOut}
           image={sElementInfo.image_link}

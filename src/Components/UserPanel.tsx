@@ -32,7 +32,7 @@ export interface ElementI {
 type OptionT = {
   label: string;
   value: string | number;
-}
+};
 const Logged = ({
   user_friends,
   loggedUserId,
@@ -114,7 +114,9 @@ const Logged = ({
         <SearchBar
           type="text"
           value={searchText}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => setSearchText(event.currentTarget.value)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchText(event.currentTarget.value)
+          }
           placeholder="Search.."
           onKeyUp={get_users}
         />
@@ -123,15 +125,17 @@ const Logged = ({
         </CrossDel>
       </SearchBox>
       {searchText ? (
-        <SearchUsers onClick={() => setSearchText("")}>
+        // <SearchUsers onClick={() => setSearchText("")}>
+        <Constacts>
           <FriendsList
             friends_data={similarUsers}
             loggedUserId={loggedUserId}
             selectUser={selectElement}
           />
-        </SearchUsers>
-      ) : null}
-      <Constacts big={user_friends.length > 10 ? 1 : 0}>
+        </Constacts>
+      ) : // </SearchUsers>
+      null}
+      <Constacts>
         {selectedMode === "friends" ? (
           <FriendsList
             friends_data={user_friends_data_list}
