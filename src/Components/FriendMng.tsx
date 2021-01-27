@@ -1,10 +1,11 @@
-import * as React from "react";
+import { useState } from "react";
 import { FriendOptions, FriendButton } from "../Styles";
+import { loggedUSerT } from "./App";
 import { SelElementI } from "./UserPanel";
 
 interface FriendMngI {
   selectedElement: SelElementI;
-  loggedUser: number;
+  loggedUser: loggedUSerT;
   updateUser: () => void;
 }
 
@@ -73,17 +74,23 @@ const FriendMng = ({ selectedElement, loggedUser, updateUser }: FriendMngI) => {
   };
   return (
     <FriendOptions>
+      {!loggedUser.friends_ids.includes(selectedElement.id) ? (
+        <FriendButton
+          onClick={() => addToFriends(loggedUser._id, selectedElement.id)}
+        >
+          Add user to friends
+        </FriendButton>
+      ) : null}
+      {loggedUser.friends_ids.includes(selectedElement.id) ? (
+        <FriendButton
+          onClick={() => deleteFromFriends(loggedUser._id, selectedElement.id)}
+        >
+          remove user from friends
+        </FriendButton>
+      ) : null}
       <FriendButton
-        onClick={() => addToFriends(loggedUser, selectedElement.id)}
+        onClick={() => createChat(loggedUser._id, selectedElement.id)}
       >
-        Add user to friends
-      </FriendButton>
-      <FriendButton
-        onClick={() => deleteFromFriends(loggedUser, selectedElement.id)}
-      >
-        remove user from friends
-      </FriendButton>
-      <FriendButton onClick={() => createChat(loggedUser, selectedElement.id)}>
         Create chat with your friend
       </FriendButton>
     </FriendOptions>

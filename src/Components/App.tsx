@@ -17,7 +17,17 @@ export type InitialOperationItemT = {
   value: string;
   changeFun: () => void;
 };
-
+export type loggedUSerT = {
+  err: boolean;
+  _id: number;
+  status: boolean;
+  email: string;
+  friends_ids: number[];
+  image_link: string;
+  name: string;
+  password: string;
+  privilage_level: number;
+}
 const App = () => {
   const isIdle = useIdle(5000);
   //data to store
@@ -144,7 +154,7 @@ const App = () => {
         },
         body: JSON.stringify(datas),
       });
-      const data = await response.json();
+      const data: loggedUSerT = await response.json();
       if (data.err === false) {
         setLoggedUser(data);
         setUserLogged(true);
@@ -171,7 +181,7 @@ const App = () => {
       },
       body: JSON.stringify({ id: loggedUser._id }),
     });
-    const data = await response.json();
+    const data: loggedUSerT = await response.json();
     setLoggedUser(data);
     return data.status;
   };

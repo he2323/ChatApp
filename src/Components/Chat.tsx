@@ -1,6 +1,5 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import { ChatMain, ActualChat, Message } from "../Styles";
+import { useEffect, useState, useRef } from "react";
+import { ChatMain, ActualChat } from "../Styles";
 import ChoosenPerson from "../Containers/ChoosenPerson";
 import { SelElementI } from "./UserPanel";
 import ChoosenChat from "../Containers/ChoosenChat";
@@ -8,13 +7,15 @@ import StartGreet from "../Containers/StartGreet";
 import FriendMng from "./FriendMng";
 import MessasgeHandle from "../Containers/MessasgeHandle";
 import RepMsg from "../Containers/RepMsg";
-import { useRef } from "react";
+import { loggedUSerT } from "./App";
+
+
 interface ChatI {
   logOut: () => void;
   updateUser: () => void;
   selectedElement: SelElementI;
   loggedUserId: number;
-  loggedUSer: any;
+  loggedUSer: loggedUSerT;
 }
 type ChatInfoT = {
   _id: number;
@@ -79,13 +80,14 @@ const Chat = ({
   useEffect(() => {
     if (oldMessages.length > 0) {
       if (
-        oldMessages[oldMessages.length - 1]._id ===
+        oldMessages[oldMessages.length - 1]._id !==
         messages[messages.length - 1]._id
       ) {
         scrollToBottom();
+      } else {
+        setOldMessages([...messages]);
       }
     }
-    setOldMessages([...messages]);
   }, [messages]);
 
   useEffect(() => {
@@ -116,6 +118,7 @@ const Chat = ({
       });
       await updateUser();
       setfetchMsg(!fetchMsg);
+      scrollToBottom();
     }
   };
 
@@ -150,7 +153,7 @@ const Chat = ({
         <FriendMng
           updateUser={updateUser}
           selectedElement={selectedElement}
-          loggedUser={loggedUserId}
+          loggedUser={loggedUSer}
         />
       ) : (
         <StartGreet isPlaceholder={true} />
