@@ -20,6 +20,7 @@ const FriendsList = ({friends_data, loggedUserId, selectUser}:FriendsListI) => {
             selectUser={selectUser}
             key={friend.id}
             type={"friend"}
+            typeMng = {"friendMng"}
           />
         ) : null
       )}

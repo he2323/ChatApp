@@ -14,7 +14,7 @@ import ChatList from "../Containers/ChatList";
 import { ImCross } from "react-icons/im";
 export interface SelElementI {
   id: number;
-  type: "friend" | "chat" | "start";
+  type: "friend" | "chat" | "start" | "friendMng" | "chatMng";
 }
 export interface UserO {
   user_friends: number[];

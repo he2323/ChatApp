@@ -20,7 +20,8 @@ const ChatList = ({ chats_data, loggedUserId, selectChat }: ChatsListI) => {
           status={chat.status}
           selectUser={selectChat}
           type={"chat"}
-        />
+          typeMng={"chatMng"}
+        />  
       ))}
     </>
   );

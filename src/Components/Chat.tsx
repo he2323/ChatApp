@@ -9,7 +9,6 @@ import MessasgeHandle from "../Containers/MessasgeHandle";
 import RepMsg from "../Containers/RepMsg";
 import { loggedUSerT } from "./App";
 
-
 interface ChatI {
   logOut: () => void;
   updateUser: () => void;
@@ -42,20 +41,24 @@ const Chat = ({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
   const fetchElementData = async (id: number) => {
-    const elementResponse = await fetch(
-      selectedElement.type === "friend" ? "/user_info" : "/chat_info",
-      {
+    let url = "";
+    if (selectedElement.type === "friend") url = "/user_info";
+    else if (selectedElement.type === "chat") url = "/chat_info";
+    else url = "";
+    if (url.length > 0) {
+      const elementResponse = await fetch(url, {
         method: "POST",
         headers: {
           content_type: "application/json",
         },
         body: JSON.stringify({ id: id }),
-      }
-    );
-    const elementData = await elementResponse.json();
-    setsElementInfo(elementData);
-    setfetchMsg(true);
-    return elementData;
+      });
+      const elementData = await elementResponse.json();
+      setsElementInfo(elementData);
+      setfetchMsg(true);
+      return elementData;
+    }
+    return {};
   };
 
   const fetchMessages = async (messages: number[]) => {
@@ -149,7 +152,7 @@ const Chat = ({
             messagesEndRef={messagesEndRef}
           />
         </ActualChat>
-      ) : selectedElement.type === "friend" ? (
+      ) : selectedElement.type === "friendMng" ? (
         <FriendMng
           updateUser={updateUser}
           selectedElement={selectedElement}
@@ -159,11 +162,15 @@ const Chat = ({
         <StartGreet isPlaceholder={true} />
       )}
       {/*  */}
-      <MessasgeHandle
-        message={message}
-        changeMessage={setMessage}
-        sendMsg={sendMsg}
-      />
+      {selectedElement.type === "chat" ? (
+        <MessasgeHandle
+          message={message}
+          changeMessage={setMessage}
+          sendMsg={sendMsg}
+        />
+      ) : (
+        <StartGreet />
+      )}
       {/*  */}
     </ChatMain>
   );
